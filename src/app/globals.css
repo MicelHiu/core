@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0d0e20;
+  --foreground: #c8b3f6;
+
+  --darkpurple: #0d0e20;
+  --purple: #2d1c7f;
+  --lilac: #7546e8;
+  --pale: #c8b3f6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-audiowide);
+  --font-body: var(--font-chakra);
+  --color-darkpurple: var(--darkpurple);
+  --color-purple: var(--purple);
+  --color-lilac: var(--lilac);
+  --color-pale: var(--pale);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, sans-serif;
+}
+
+.warnet-bg {
+  background-color: #0D0E20;
+  background-image:
+    /* radial glow */
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(45, 28, 127, 0.5) 0%, transparent 70%),
+    /* grid lines */
+    linear-gradient(rgba(117, 70, 232, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(117, 70, 232, 0.07) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
 }
