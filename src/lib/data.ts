@@ -37,12 +37,15 @@ export async function fetchProducts(): Promise<Room[]> {
 export async function fetchProductById(id: string): Promise<Room | null> {
     try {
         const res = await fetch(`/api/rooms/${id}`);
-        if(@res.ok) return null;
+        if(!res.ok) return null;
         const data: Room = await res.json();
         return {
             ...data,
             id: data.id,
             price: data.price,
         };
+    } catch {
+        return null;
     }
 }
+
