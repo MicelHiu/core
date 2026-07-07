@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { AuthUser, SessionData } from "@/lib/auth";
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
     try {
         const { email, password } = await request.json();
         if (!email || !password) {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         }
 
         const response = await fetch("https://6a48f516a033dcb98d651649.mockapi.io/users", {
-            method: "POST",
+            method: "GET",
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
                 email,

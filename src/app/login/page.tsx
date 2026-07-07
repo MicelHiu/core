@@ -2,35 +2,45 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { mutate } from 'swr';
 import Link from 'next/link';
 
 export default function login() {
     const [email, setEmail] =useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
 
     const router = useRouter();
 
-    const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLoginSubmit = async (e: any) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
-        //mock authentication check
-        setTimeout(() => {
-            if(email.trim() === "admin@gmail.com" && password === "admin") {
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("userEmail", email.trim());
-                //sync header state across windows/components
-                window.dispatchEvent(new Event("storage"));
-                router.push("/dashboard");
-            } else {
-                setError("Invalid email or password. Hint: admin@gmail.com / admin");
-                setLoading(false);
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, password}),
+                credentials: 'include',
+            });
+            const data = await res.json();
+
+            if(!res.ok) {
+                throw new Error(data.error || 'Authentication Failed');
             }
-        }, 600)
-    }
+
+            //mutate the global SWR cache key to fetch fresh session details immedietly
+            await mutate('/api/auth/me', data, true);
+            if(data.role === "admin") {
+                router.push('/dashboard/admin')
+            } else {
+                router.push('/dashboard');
+            }
+        } catch (err) {
+            throw new Error( 'Authentication failed. Please register if you are new.');
+            setLoading(false);
+        }
+    };
 
     return (
         <>
@@ -41,11 +51,11 @@ export default function login() {
                         <p className='text-xs text-lilac mt-1.5'>Play . Connect . Compete</p>
                     </header>
 
-                    {error && (
+                    {/* {Error && (
                         <div className='mb-4 p-3 bg-red-500 border border-red-300 text-xs font-semibold text-red-200 rounded-xl'>
-                            ⚠ {error}
+                            ⚠ {Error}
                         </div>
-                    )}
+                    )} */}
 
                     <form onSubmit={handleLoginSubmit} className='flex flex-col gap-4'>
                         <div className='flex flex-row justify-center items-center gap-2 mb-4 border-b border-lilac pb-4'>

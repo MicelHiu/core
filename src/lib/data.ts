@@ -24,7 +24,7 @@ export const formatPrice = (price: number) => {
 }
 
 //api helper
-export async function fetchProducts(): Promise<Room[]> {
+export async function fetchRooms(): Promise<Room[]> {
     const res = await fetch('/api/rooms');
     const data: Room[] = await res.json();
     return data.map((p) => ({
@@ -34,7 +34,7 @@ export async function fetchProducts(): Promise<Room[]> {
     }));
 }
 
-export async function fetchProductById(id: string): Promise<Room | null> {
+export async function fetchRoomById(id: string): Promise<Room | null> {
     try {
         const res = await fetch(`/api/rooms/${id}`);
         if(!res.ok) return null;
@@ -49,3 +49,8 @@ export async function fetchProductById(id: string): Promise<Room | null> {
     }
 }
 
+export async function fetchCategories(): Promise<string[]> {
+    const products = await fetchRooms();
+    const categories = [...new Set(products.map((p) => p.category))];
+    return categories;
+}

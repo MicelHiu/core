@@ -70,7 +70,7 @@ export function Navigation() {
             </nav>
 
             { isLoggedIn ? (
-                <div>
+                <div className="flex flex-row gap-8">
                     <Link
                         href="/dashboard"
                         className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
