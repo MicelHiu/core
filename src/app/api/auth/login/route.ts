@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { AuthUser, SessionData } from "@/lib/auth";
+import { error } from "console";
+import { match } from "assert";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
     try {
         const { email, password } = await request.json();
         if (!email || !password) {
@@ -12,15 +14,7 @@ export async function GET(request: Request) {
             );
         }
 
-        const response = await fetch("https://6a48f516a033dcb98d651649.mockapi.io/users", {
-            method: "GET",
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email,
-                password,
-                expiresInMins: 60,
-            }),
-        });
+        const response = await fetch("https://6a48f516a033dcb98d651649.mockapi.io/users", {method: "GET"});
 
         if(!response.ok) {
             const errorData = await response.json();
@@ -32,20 +26,36 @@ export async function GET(request: Request) {
 
         const data = await response.json();
 
+        if(!data || data.length === 0) {
+            return NextResponse.json(
+                {error: "No account detected, please sign in."},
+                {status: 404}
+            );
+        }
+
+        const matchedData = data[0];
+
+        //pengecekan password -- BUTUH REVISI NANTI KALAU SUDAH ADA DB
+        if(matchedData.password !== password) {
+            return NextResponse.json(
+                {error: "Wrong email or password"},
+                {status: 401}
+            )
+        }
         const authUser: AuthUser = {
-            id_user: data.id,
-            full_name: data.fullName,
-            nickname: data.nickname,
-            email: data.email,
-            contact: data.contact,
-            password: data.password,
-            points: data.points,
-            role: data.role,
+            id_user: matchedData.id,
+            full_name: matchedData.fullName,
+            nickname: matchedData.nickname,
+            email: matchedData.email,
+            contact: matchedData.contact,
+            password: matchedData.password,
+            points: matchedData.points,
+            role: matchedData.role,
         };
 
         const sessionData: SessionData = {
             user: authUser,
-            token: data.accessToken,
+            token: matchedData.accessToken,
         }
 
         const cookieStore = await cookies();
