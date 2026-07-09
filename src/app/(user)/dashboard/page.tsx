@@ -1,6 +1,7 @@
 "use client";
 
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/user/Navigation";
+import { Footer } from "@/components/user/Footer";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchRooms, fetchCategories, formatPrice, Room } from "@/lib/data";
@@ -55,6 +56,7 @@ export default function UserDashboard() {
     if (isLoading || isPageLoading) {
         return (
             <>
+                <Navigation />
                 <main className="container text-center py-24 min-h-screen min-w-screen">
                     <p className="text-sm animate-pulse">Setting up the environment, please wait a moment...</p>
                 </main>
@@ -64,6 +66,7 @@ export default function UserDashboard() {
 
     return (
         <>
+            <Navigation />
             <main className="flex flex-col min-h-screen">
                 <section className="w-full py-16 px-6 text-center">
                     <h1 className="text-5xl font-bold">Hello {isLoggedIn ? `${user.nickname}` : "Guest"}, Welcome to CORE</h1>
@@ -90,7 +93,7 @@ export default function UserDashboard() {
                                 </span>
                                 <h2 className="text-2xl font-bold">{room.name}</h2>
                                 <p className="text-sm line-clamp-3">{room.description}</p>
-                                <p className="text-xl font-bold">{formatPrice(room.price)}</p>
+                                <p className="text-xl font-bold">{formatPrice(room.price)}/hour</p>
                                 <Link 
                                     href={`/rooms/${room.id}`}
                                     className="mt-2 w-fit text-sm px-6 py-2 rounded-full hover:opasity-700 transition"
@@ -113,8 +116,34 @@ export default function UserDashboard() {
                 </section>
 
                 {/* produk per kategori */}
-
+                {categories.map((cat) => (
+                    <section key={cat} className="max-w-6xl mx-auto w-full px-6 py-10">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-3xl font-bold">{cat}</h2>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            {roomList
+                                .filter((p) => p.category === cat)
+                                .slice(0, 3)
+                                .map((room) => (
+                                    <Link key={room.id} href={`/rooms/${room.id}`} className="group border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:bg-purple hover:scale-105 transition">
+                                        <Image 
+                                            src={room.image} 
+                                            alt={room.name} 
+                                            width={400} 
+                                            height={300} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                        <div className="p-4">
+                                            <h3 className="font-semibold text-sm line-clamp-1">{room.name}</h3>
+                                            <p className="text-gray-500 text-xs mt-1 line-clamp-2">{room.description}</p>
+                                            <p className="font-bold mt-2">{formatPrice(room.price)}/hour</p>
+                                        </div>
+                                    </Link>
+                                ))}
+                        </div>
+                    </section>
+                ))}
             </main>
+            <Footer />
         </>
     )
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Chakra_Petch, Audiowide } from "next/font/google";
-import { Navigation } from "@/components/Navigation";
 import "./globals.css";
 
 const chakraPetch = Chakra_Petch({
@@ -31,7 +30,6 @@ export default function RootLayout({
       className={`${chakraPetch.className} ${audiowide.variable} ${chakraPetch.variable}/* h-full antialiased */`}
     >
       <body className="min-h-full flex flex-col">
-        <Navigation />
         {children}
       </body>
     </html>

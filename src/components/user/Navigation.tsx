@@ -44,16 +44,10 @@ export function Navigation() {
                     Home
                 </Link>
                 <Link 
-                    href="/rooms"
+                    href="/promotion"
                     className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
                 >
-                    Rooms
-                </Link>
-                <Link 
-                    href="/history"
-                    className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
-                >
-                    History
+                    Promo
                 </Link>
                 <Link 
                     href="/contact"
