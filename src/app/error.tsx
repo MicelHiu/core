@@ -27,13 +27,13 @@ export default function Error({ error, reset }: ErrorProps) {
                     <div className="mt-8 flex gap-4 justify-center">
                         <button
                         onClick={() => reset()}
-                        className="px-5 py-2.5 bg-purple hover:bg-darkpurple text-sm font-semibold text-lilac rounded-lg transition-colors cursor-pointer"
+                        className="px-5 py-2.5 bg-purple hover:bg-darkpurple text-sm font-semibold text-pale rounded-lg transition-colors cursor-pointer"
                         >
                             Try Again
                         </button>
                         <Link
                             href="/dashboard"
-                            className="px-5 py-2.5 bg-purple hover:bg-darkpurple  border border-lilac text-sm font-semibold text-lilac rounded-lg transition-colors"
+                            className="px-5 py-2.5 bg-purple hover:bg-darkpurple  border border-lilac text-sm font-semibold text-pale rounded-lg transition-colors"
                         >
                             Go Home
                         </Link>

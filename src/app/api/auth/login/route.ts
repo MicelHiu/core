@@ -14,7 +14,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const response = await fetch("https://6a48f516a033dcb98d651649.mockapi.io/users", {method: "GET"});
+        const response = await fetch(`https://6a48f516a033dcb98d651649.mockapi.io/users?email=${encodeURIComponent(email)}`, {method: "GET"});
 
         if(!response.ok) {
             const errorData = await response.json();
@@ -33,7 +33,9 @@ export async function POST(request: Request) {
             );
         }
 
-        const matchedData = data[0];
+        const matchedData = data.find(
+            (u: any) => u.email.toLowerCase() === email.toLowerCase()
+        );
 
         //pengecekan password -- BUTUH REVISI NANTI KALAU SUDAH ADA DB
         if(matchedData.password !== password) {
@@ -43,8 +45,8 @@ export async function POST(request: Request) {
             )
         }
         const authUser: AuthUser = {
-            id_user: matchedData.id,
-            full_name: matchedData.fullName,
+            id_user: matchedData.id_user,
+            full_name: matchedData.full_name,
             nickname: matchedData.nickname,
             email: matchedData.email,
             contact: matchedData.contact,

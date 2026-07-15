@@ -66,7 +66,7 @@ export function Navigation() {
             { isLoggedIn ? (
                 <div className="flex flex-row gap-8">
                     <Link
-                        href="/dashboard"
+                        href="/profile"
                         className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
                     >
                         Profile
