@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Skeleton } from "@/components/user/dashboard/Skeleton";
 import { Navigation } from "@/components/user/Navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
