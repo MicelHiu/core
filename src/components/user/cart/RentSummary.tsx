@@ -1,4 +1,9 @@
 export function RentSummary() {
+    const HOURS = Array.from({ length: 24 }, (_, i) => {
+    const hour = i + 1;
+    return `${String(hour).padStart(2, "0")}.00`;
+    });
+    
     return (
         <section className="max-w-md bg-darkpurple/60 border border-lilac/40 rounded-2xl p-8 shadow-xl">
             <h2 className="text-2xl font-bold text-pale mb06 text-center">Order Summary</h2>
