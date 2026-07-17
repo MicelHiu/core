@@ -1,4 +1,12 @@
-export function RentSummary() {
+type RentSummaryProps = {
+    roomName: string;
+    price: number;
+    seats: number;
+    duration: number;
+    total: number;
+}
+
+export function RentSummary({roomName, price, seats, duration, total}: RentSummaryProps) {
     const HOURS = Array.from({ length: 24 }, (_, i) => {
     const hour = i + 1;
     return `${String(hour).padStart(2, "0")}.00`;
