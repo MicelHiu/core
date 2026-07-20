@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Room, formatPrice } from "@/lib/data";
 import { useCartStore } from "@/store/CartStore";
+import { useToast } from "@/hooks/useToast";
+import { Toast } from "../Toast";
 
 interface RoomInfoProps {
     room: Room;
@@ -13,6 +15,7 @@ interface RoomInfoProps {
 export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
     const router = useRouter();
     const addToCart = useCartStore((state) => state.addToCart);
+    const {message, showToast} = useToast();
 
     const handleAddToCart = () => {
         if(!isLoggedIn) {
@@ -20,6 +23,7 @@ export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
             return;
         }
         addToCart(room);
+        showToast(`${room.name} ditambahkan ke cart!`);
     }
 
     return (
