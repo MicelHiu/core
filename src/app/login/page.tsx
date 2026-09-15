@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { mutate } from 'swr';
 import Link from 'next/link';
+import { backendFetch } from '@/lib/backend';
 
 export default function login() {
     const [email, setEmail] =useState<string>("");
@@ -19,7 +20,7 @@ export default function login() {
         setLoading(true);
 
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await backendFetch('/auth/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email, password}),

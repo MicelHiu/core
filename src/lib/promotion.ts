@@ -1,23 +1,22 @@
 import { Promo } from "@/components/user/promotion/PromoCard";
 
-// TODO API: nanti ganti file ini jadi fetch dari backend, misal:
-//   export async function getPromotions() {
-//     const res = await fetch(`${process.env.API_URL}/promotions`);
-//     return res.json();
-//   }
-// dan di page.tsx tinggal ganti PROMOTIONS jadi hasil fetch/useSWR
+interface DiscountFromApi {
+    id: string;
+    name: string;
+    value: string; // Prisma Decimal dikirim sbg string via JSON
+    valid_until: string;
+}
 
-export const PROMOTIONS: Promo[] = [
-    {
-        id: "newbie",
-        title: "Newbie",
-        discount: 30,
-        description: "Diskon untuk member baru",
-    },
-    {
-        id: "all-night",
-        title: "All Night",
-        discount: 50,
-        description: "Booking di atas jam 22.00",
-    },
-];
+export async function getPromotions(): Promise<Promo[]> {
+    const res = await fetch("/api/discounts");
+    if (!res.ok) throw new Error("Failed to fetch discounts");
+
+    const data: DiscountFromApi[] = await res.json();
+
+    return data.map((d) => ({
+        id: d.id,
+        title: d.name,
+        discount: Number(d.value),
+        validUntil: d.valid_until,
+    }));
+}
