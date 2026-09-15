@@ -1,3 +1,5 @@
+import { backendFetch } from "./backend";
+
 export interface AuthUser {
     id_user: string;
     full_name: string;
@@ -29,7 +31,7 @@ export async function registerUser(user: RegisterForm) {
         ...user,
     }
 
-    const res = await fetch('/api/auth/register', {
+    const res = await backendFetch('/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user),

@@ -20,15 +20,14 @@ export default function login() {
         setLoading(true);
 
         try {
-            const res = await backendFetch('/auth/login', {
+            const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({email, password}),
-                credentials: 'include',
+                body: JSON.stringify({ email, password }),
             });
             const data = await res.json();
 
-            if(!res.ok) {
+            if (!res.ok) {
                 throw new Error(data.error || 'Authentication Failed');
             }
 
@@ -36,7 +35,7 @@ export default function login() {
             await mutate('/api/auth/me', data, true);
             router.push(data.role === 'admin' ? '/dashboard/admin' : '/dashboard');
         } catch (err: any) {
-            setError(err.message || 'Authentication failed. Please register if you are new'); 
+            setError(err.message || 'Authentication failed. Please register if you are new');
         } finally {
             setLoading(false);
         }

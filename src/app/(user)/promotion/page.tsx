@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/user/dashboard/Skeleton";
 import { Navigation } from "@/components/user/Navigation";
 import { PromoCard } from "@/components/user/promotion/PromoCard";
-import { Promo } from "@/components/user/promotion/PromoCard";
-import { getPromotions } from "@/lib/promotion";
+import { usePromotions } from "@/hooks/usePromotions";
 
 export default function Promotion() {
-    const [promotions, setPromotions] = useState<Promo[]>([]);
+    const {promotions, isLoading, error} = usePromotions();
 
-    useEffect(() => {
-        getPromotions()
-            .then(setPromotions)
-            .catch(() => setPromotions([]));
-    }, []);
+    if(isLoading) {
+        return <Skeleton />
+    }
 
+    if(error) {
+        return <p className="text-center text-red-400">Promotions failed to load. Please try again later...</p>
+    }
     return (
         <>
             <Navigation />

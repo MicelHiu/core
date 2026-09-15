@@ -15,7 +15,7 @@ export async function GET() {
 
     try {
         const res = await backendFetch('/discounts', {
-            headers: {Authorization: 'Bearer ${token'},
+            headers: {Authorization: `Bearer ${token}`},
         });
         const data = await res.json();
         return NextResponse.json(data, {status: res.status}); 

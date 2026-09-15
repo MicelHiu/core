@@ -1,3 +1,6 @@
+import { backendFetch } from "./backend";
+
+//rooms
 export interface Room {
     id: string;
     name: string;
@@ -23,9 +26,8 @@ export const formatPrice = (price: number) => {
     }).format(price);
 }
 
-//api helper
 export async function fetchRooms(): Promise<Room[]> {
-    const res = await fetch('/api/rooms');
+    const res = await backendFetch('/rooms');
     const data: Room[] = await res.json();
     return data.map((p) => ({
         ...p,
@@ -36,7 +38,7 @@ export async function fetchRooms(): Promise<Room[]> {
 
 export async function fetchRoomById(id: string): Promise<Room | null> {
     try {
-        const res = await fetch(`/api/rooms/${id}`);
+        const res = await backendFetch(`/rooms/${id}`);
         if(!res.ok) return null;
         const data: Room = await res.json();
         return {
@@ -54,3 +56,4 @@ export async function fetchCategories(): Promise<string[]> {
     const categories = [...new Set(products.map((p) => p.category))];
     return categories;
 }
+

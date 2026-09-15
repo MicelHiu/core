@@ -1,9 +1,10 @@
 "use client";
 import useSWR from "swr";
 import { AuthUser } from "@/lib/auth";
+import { backendFetch } from "@/lib/backend";
 
 const fetcher = (url: string) => 
-    fetch(url).then((res) => {
+    backendFetch(url).then((res) => {
         if(!res.ok) throw new Error(String(res.status));
         return res.json();
     });

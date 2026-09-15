@@ -33,6 +33,12 @@ export async function POST(request: Request) {
         const meRes = await backendFetch("/users/current", {
             headers: {Authorization: `Bearer ${access_token}`},
         });
+        if(!meRes.ok) {
+            return NextResponse.json(
+                {error: "Failed to fetch user data after login."},
+                {status: meRes.status}
+            )
+        }
         const user = await meRes.json();
 
         //3. simpan token di cookie httpOnly
