@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-
-const MOCK_API = "https://6a48f516a033dcb98d651649.mockapi.io/rooms";
+import { backendFetch } from "@/lib/backend";
 
 export async function GET() {
     try {
-        const response = await fetch(MOCK_API);
+        const response = await backendFetch('/rooms');
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error) {

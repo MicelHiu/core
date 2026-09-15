@@ -1,6 +1,5 @@
+import { backendFetch } from "@/lib/backend";
 import { NextResponse } from "next/server";
-
-const MOCK_API = "https://6a48f516a033dcb98d651649.mockapi.io/users";
 
 export async function POST(request: Request) {
     const body = await request.json();
@@ -12,11 +11,10 @@ export async function POST(request: Request) {
         );
     }
 
-    const res = await fetch(MOCK_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
+    const res = await backendFetch("/auth/register", {
+        method: "POST",
         body: JSON.stringify(body),
     });
     const data = await res.json();
-    return NextResponse.json(data, {status: 201});
+    return NextResponse.json(data, {status: res.status});
 }

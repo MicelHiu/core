@@ -29,7 +29,7 @@ export async function registerUser(user: RegisterForm) {
         ...user,
     }
 
-    const res = await fetch('/api/auth/resgister', {
+    const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user),
