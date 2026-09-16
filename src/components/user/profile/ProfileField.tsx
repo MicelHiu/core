@@ -1,3 +1,9 @@
+import { Profile } from "@/lib/dataRoute";
+
+interface ProfileProps {
+    profile: Profile;
+}
+
 export function ProfileField({ label, value }: { label: string; value?: string | number }) {
     return (
         <div className="flex items-center justify-between border-b border-lilac/30 py-3">

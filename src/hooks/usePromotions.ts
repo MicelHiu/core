@@ -1,4 +1,4 @@
-import { DiscountFromApi, getPromotions } from "@/lib/promotion";
+import { DiscountFromApi, getPromotions } from "@/lib/dataRoute";
 import { useEffect, useState } from "react";
 
 interface usePromotionsResult {

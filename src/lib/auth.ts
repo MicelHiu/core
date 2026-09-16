@@ -41,3 +41,4 @@ export async function registerUser(user: RegisterForm) {
         ...result,
     };
 }
+

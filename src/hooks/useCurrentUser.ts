@@ -4,7 +4,7 @@ import { AuthUser } from "@/lib/auth";
 import { backendFetch } from "@/lib/backend";
 
 const fetcher = (url: string) => 
-    backendFetch(url).then((res) => {
+    fetch(url).then((res) => {
         if(!res.ok) throw new Error(String(res.status));
         return res.json();
     });
