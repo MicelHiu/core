@@ -1,3 +1,5 @@
+import { formatPrice } from "@/lib/data";
+
 type RentSummaryProps = {
     roomName: string;
     price: number;
@@ -7,24 +9,36 @@ type RentSummaryProps = {
 }
 
 export function RentSummary({roomName, price, seats, duration, total}: RentSummaryProps) {
-    const HOURS = Array.from({ length: 24 }, (_, i) => {
-    const hour = i + 1;
-    return `${String(hour).padStart(2, "0")}.00`;
-    });
-    
     return (
         <section className="max-w-md bg-darkpurple/60 border border-lilac/40 rounded-2xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-pale mb06 text-center">Order Summary</h2>
-            <div className="flex flex-col justify-between">
-                <p className="font-bold">Room Type: <span className="text-base p-4 font-medium">PC REGULAR</span></p>
+            <h2 className="text-2xl font-bold text-pale mb-6 text-center">Order Summary</h2>
+            <div className="flex flex-col gap-2">
+                <div className="flex justify-between text-sm">
+                    <span className="text-pale/70">Room Type</span>
+                    <span className="font-semibold text-pale">{roomName}</span>
+                </div>
 
-                <p className="font-bold">Price: <span className="text-base p-4 font-medium">Rp10.000</span></p>
+                <div className="flex justify-between text-sm">
+                    <span className="text-pale/70">Price</span>
+                    <span className="font-semibold text-pale">{formatPrice(price)}/hour</span>
+                </div>
 
-                <p className="font-bold">Seats: <span className="text-base p-4 font-medium">1</span></p>
+                <div className="flex justify-between text-sm">
+                    <span className="text-pale/70">Seats</span>
+                    <span className="font-semibold text-pale">{seats}</span>
+                </div>
 
-                <p className="font-bold">Hour: <span className="text-base p-4 font-medium">2</span></p>
-                <hr/>
-                <p className="font-bold">Total:<span className="text-base p-4 font-medium">Rp20,000</span></p>
+                <div className="flex justify-between text-sm">
+                    <span className="text-pale/70">Hour</span>
+                    <span className="font-semibold text-pale">{duration}</span>
+                </div>
+
+                <hr className="border-lilac/30 my-2" />
+
+                <div className="flex justify-between">
+                    <span className="font-bold text-pale">Total</span>
+                    <span className="font-bold text-pale">{formatPrice(total)}</span>
+                </div>
             </div>
         </section>
     )

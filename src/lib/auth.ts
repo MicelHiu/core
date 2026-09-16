@@ -1,7 +1,8 @@
 import { backendFetch } from "./backend";
+import { cookies } from "next/headers";
 
 export interface AuthUser {
-    id_user: string;
+    id: string;
     full_name: string;
     nickname: string;
     email: string;
@@ -22,6 +23,19 @@ export interface RegisterForm {
     email: string;
     contact: string;
     password: string;
+}
+
+export async function getSessionToken(): Promise<string | null> {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("session");
+    if (!session) return null;
+
+    try {
+        const { token }: SessionData = JSON.parse(session.value);
+        return token ?? null;
+    } catch {
+        return null;
+    }
 }
 
 //api helper

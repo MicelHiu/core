@@ -2,10 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useState } from "react";
 import { Room, formatPrice } from "@/lib/data";
-import { useCartStore } from "@/store/CartStore";
+import { createCartItem } from "@/lib/dataRoute";
 import { useToast } from "@/hooks/useToast";
 import { Toast } from "../Toast";
+import { mutate } from "swr";
 
 interface RoomInfoProps {
     room: Room;
@@ -14,16 +16,32 @@ interface RoomInfoProps {
 
 export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
     const router = useRouter();
-    const addToCart = useCartStore((state) => state.addToCart);
-    const {message, showToast} = useToast();
+    const { message, showToast } = useToast();
+    const [isAdding, setIsAdding] = useState(false);
 
-    const handleAddToCart = () => {
-        if(!isLoggedIn) {
+    const handleAddToCart = async () => {
+        if (!isLoggedIn) {
             router.push("/login");
             return;
         }
-        addToCart(room);
-        showToast(`${room.name} ditambahkan ke cart!`);
+
+        setIsAdding(true);
+        try {
+            const today = new Date().toISOString().slice(0, 10);
+            await createCartItem({
+                room_id: room.id,
+                quantity: 1,
+                date_play: today,
+                time_start: "08:00",
+                time_end: "10:00",
+            });
+            mutate('/api/carts');
+            showToast(`${room.name} ditambahkan ke cart!`);
+        } catch {
+            showToast("Gagal menambahkan ke cart, coba lagi.");
+        } finally {
+            setIsAdding(false);
+        }
     }
 
     return (
@@ -52,12 +70,14 @@ export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
                     <p className="text-2xl font-bold">{formatPrice(room.price)}/hour</p>
                     <button
                         onClick={handleAddToCart}
-                        className="mt-4 w-fit bg-purple text-pale px-8 py-3 rounded-full hover:bg-lilac hover:text-darkpurple transition text-sm font-semibold cursor-pointer"
+                        disabled={isAdding}
+                        className="mt-4 w-fit bg-purple text-pale px-8 py-3 rounded-full hover:bg-lilac hover:text-darkpurple transition text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isLoggedIn ? "Book Room" : "Login to Book"}
+                        {!isLoggedIn ? "Login to Book" : isAdding ? "Adding..." : "Book Room"}
                     </button>
                 </div>
             </div>
+            <Toast message={message} />
         </main>
     );
 }

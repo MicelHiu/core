@@ -26,34 +26,46 @@ export const formatPrice = (price: number) => {
     }).format(price);
 }
 
+interface BackendRoom {
+    id: string;
+    name: string;
+    description: string;
+    price: string | number;
+    image: string;
+    type: string;
+    stock: number;
+}
+
+function mapBackendRoom(p: BackendRoom): Room {
+    return {
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        price: Number(p.price),
+        image: p.image,
+        category: p.type,
+        frequency: p.stock,
+    };
+}
+
 export async function fetchRooms(): Promise<Room[]> {
     const res = await backendFetch('/rooms');
-    const data: Room[] = await res.json();
-    return data.map((p) => ({
-        ...p,
-        id: p.id,
-        price: p.price,
-    }));
+    const data: BackendRoom[] = await res.json();
+    return data.map(mapBackendRoom);
 }
 
 export async function fetchRoomById(id: string): Promise<Room | null> {
     try {
         const res = await backendFetch(`/rooms/${id}`);
         if(!res.ok) return null;
-        const data: Room = await res.json();
-        return {
-            ...data,
-            id: data.id,
-            price: data.price,
-        };
+        const data: BackendRoom = await res.json();
+        return mapBackendRoom(data);
     } catch {
         return null;
     }
 }
 
-export async function fetchCategories(): Promise<string[]> {
-    const products = await fetchRooms();
-    const categories = [...new Set(products.map((p) => p.category))];
-    return categories;
+export function getCategories(rooms: Room[]): string[] {
+    return [...new Set(rooms.map((p) => p.category))];
 }
 

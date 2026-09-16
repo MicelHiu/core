@@ -53,3 +53,133 @@ export async function getProfile(): Promise<Profile[]> {
         password: d.password
     }));
 }
+
+//cart
+export interface CartRoom {
+    name: string;
+    price: string | number;
+    type: string;
+    image: string;
+    stock: number;
+}
+
+export interface CartEntry {
+    id: string;
+    user_id: string;
+    room_id: string;
+    quantity: number;
+    discount_id: string | null;
+    discount_value: string | null;
+    date_play: string;
+    time_start: string;
+    time_end: string;
+    total_price: string;
+    created_at: string;
+    rooms?: CartRoom;
+}
+
+export interface CreateCartPayload {
+    room_id: string;
+    quantity: number;
+    date_play: string;
+    time_start: string;
+    time_end: string;
+    discount_id?: string;
+}
+
+export type UpdateCartPayload = Partial<CreateCartPayload>;
+
+export async function fetchCarts(): Promise<CartEntry[]> {
+    const res = await fetch("/api/carts");
+    if (!res.ok) return [];
+    return res.json();
+}
+
+export async function fetchCartById(id: string): Promise<CartEntry | null> {
+    const res = await fetch(`/api/carts/${id}`);
+    if (!res.ok) return null;
+    return res.json();
+}
+
+export async function createCartItem(payload: CreateCartPayload): Promise<CartEntry> {
+    const res = await fetch("/api/carts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Failed to add to cart");
+    return res.json();
+}
+
+export async function updateCartItem(id: string, payload: UpdateCartPayload): Promise<CartEntry> {
+    const res = await fetch(`/api/carts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        console.error("updateCartItem failed", res.status, data);
+        throw new Error(data?.message ?? "Failed to update cart");
+    }
+    return data;
+}
+
+export async function deleteCartItem(id: string): Promise<void> {
+    const res = await fetch(`/api/carts/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Failed to remove cart item");
+}
+
+//booking
+export type BookingStatus = "confirmed" | "ongoing" | "canceled" | "completed";
+
+export interface BookingEntry {
+    code: string;
+    user_id: string;
+    room_id: string;
+    guest_name: string;
+    guest_contact: string;
+    time_start: string;
+    time_end: string;
+    date_play: string;
+    unit_price: string;
+    discount_id: string | null;
+    discount_value: string | null;
+    quantity: number;
+    total_price: string;
+    status: BookingStatus;
+    created_at: string;
+    rooms?: CartRoom;
+}
+
+export interface CreateBookingPayload {
+    cart_id: string;
+    guest_name: string;
+    guest_contact: string;
+}
+
+export async function createBooking(payload: CreateBookingPayload): Promise<BookingEntry> {
+    const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        console.error("createBooking failed", res.status, data);
+        throw new Error(data?.message ?? "Failed to confirm booking");
+    }
+    return data;
+}
+
+export async function fetchCurrentBookings(): Promise<BookingEntry[]> {
+    const res = await fetch("/api/bookings/current");
+    if (!res.ok) return [];
+    return res.json();
+}
+
+export async function fetchBookingByCode(code: string): Promise<BookingEntry | null> {
+    const res = await fetch(`/api/bookings/${code}`);
+    if (!res.ok) return null;
+    return res.json();
+}

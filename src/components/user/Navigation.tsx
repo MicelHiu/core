@@ -6,6 +6,7 @@ import useSWR, { mutate } from "swr";
 import { AuthUser } from "@/lib/auth";
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useCarts } from "@/hooks/useCarts";
 
 const fetcher = (url: string) =>
     fetch(url).then((res) => {
@@ -22,6 +23,8 @@ export function Navigation() {
     });
     
     const isLoggedIn = !!user;
+
+    const { carts } = useCarts();
 
     const handleSignOut = async() => {
         try {
@@ -64,7 +67,7 @@ export function Navigation() {
                 <div className="flex flex-row gap-8">
                     <Link 
                         href="/cart"
-                        className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                        className="relative text-sm font-medium text-pale hover:text-lilac cursor-pointer"
                     >
                         <svg
                             width="24"
@@ -88,11 +91,14 @@ export function Navigation() {
                                 fill="currentColor"
                             />
                         </svg>
+                        {carts.length > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center">{carts.length}</span>
+                        )}
                     </Link>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
                             <button className="text-sm font-medium text-pale hover:text-lilac cursor-pointer outline-none">
-                                 <svg
+                                <svg
                                     width="24"
                                     height="24"
                                     viewBox="0 0 24 24"

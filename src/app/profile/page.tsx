@@ -12,7 +12,7 @@ export default function Profile() {
     if (isUserLoading) return <Skeleton />;
 
     const fields = [
-        { label: "ID", value: user?.id_user },
+        { label: "ID", value: user?.id },
         { label: "Full Name", value: user?.full_name },
         { label: "Nickname", value: user?.nickname },
         { label: "Email", value: user?.email },
@@ -30,7 +30,6 @@ export default function Profile() {
                         {fields.map((f) => (
                             <ProfileField key={f.label} {...f} />
                         ))}
-                        <PasswordField value={user?.password} />
                     </div>
                 </section>
             </main>
