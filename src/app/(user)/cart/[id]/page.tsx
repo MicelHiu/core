@@ -1,16 +1,19 @@
-"use client";
-
 import { RentSummary } from "@/components/user/cart/RentSummary";
 import UserSummary from "@/components/user/cart/UserSummary";
 import { CompletePopUp } from "@/components/user/cart/CompletePopUp";
 import { Navigation } from "@/components/user/Navigation";
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCarts";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { updateCartItem, createBooking } from "@/lib/dataRoute";
+import { updateCartItem, createBooking, DiscountFromApi } from "@/lib/dataRoute";
 import { fetchRoomById, Room } from "@/lib/data";
 import { mutate } from "swr";
+import { usePromotions } from "@/hooks/usePromotions";
+import { PromoUsedCard } from "@/components/user/cart/PromoUsedCard";
+import { PromoPickerPopup } from "@/components/user/cart/PromoPicker";
+import { useBookingForm } from "@/hooks/useBookingForm";
+import { useEffect } from "react";
 
 export default function CartDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -20,36 +23,16 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
     const { user } = useCurrentUser();
     const [room, setRoom] = useState<Room | null>(null);
 
-    const [name, setName] = useState("");
-    const [contact, setContact] = useState("");
-    const [date, setDate] = useState("");
-    const [seatsInput, setSeatsInput] = useState("1");
-    const [startTime, setStartTime] = useState("08:00");
-    const [finishTime, setFinishTime] = useState("10:00");
+    const { form, update, seats, duration } = useBookingForm(cart, user);
 
-    useEffect(() => {
-        if (user) {
-            setName(user.full_name ?? "");
-            setContact(user.contact ?? "");
-        }
-    }, [user]);
+    const [showPromoPopUp, setShoowPromoPopUp] = useState(false);
+    const { promotions, isLoading: isPromosLoading } = usePromotions();
+    const selectedPromo = promotions.find((p) => p.id === cart?.discount_id) ?? null;
 
     useEffect(() => {
         if (!cart) return;
-        setSeatsInput(String(cart.quantity));
-        setDate(cart.date_play.slice(0, 10));
-        setStartTime(cart.time_start.slice(0, 5));
-        setFinishTime(cart.time_end.slice(0, 5));
         fetchRoomById(cart.room_id).then(setRoom).catch(() => setRoom(null));
     }, [cart]);
-
-    const seats = Math.max(1, parseInt(seatsInput, 10) || 1);
-
-    const duration = (() => {
-        const toHour = (t: string) => parseInt(t.split(":")[0], 10);
-        const diff = toHour(finishTime) - toHour(startTime);
-        return diff > 0 ? diff : 0;
-    })();
 
     if (isLoading) {
         return (
@@ -78,21 +61,23 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
 
     const price = room ? Number(room.price) : 0;
     const total = price * seats * duration;
-    const isFormValid = name.trim() && contact.trim() && date && duration > 0;
+    const discountValue = selectedPromo ? Number(selectedPromo.value) : 0;
+    const finalTotal = Math.max(0, total - discountValue);
+    const isFormValid = form.name.trim() && form.contact.trim() && form.date && duration > 0;
 
     const handleBooked = async () => {
         setIsSubmitting(true);
         try {
             await updateCartItem(cart.id, {
                 quantity: seats,
-                date_play: date,
-                time_start: startTime,
-                time_end: finishTime,
+                date_play: form.date,
+                time_start: form.startTime,
+                time_end: form.finishTime,
             });
             await createBooking({
                 cart_id: cart.id,
-                guest_name: name,
-                guest_contact: contact,
+                guest_name: form.name,
+                guest_contact: form.contact,
             });
             mutate('/api/carts');
             setShowThanks(true);
@@ -100,6 +85,16 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
             alert(err instanceof Error ? err.message : "Gagal konfirmasi booking, coba lagi.");
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const handleSelectPromo = async (promo: DiscountFromApi) => {
+        try {
+            await updateCartItem(cart.id, { discount_id: promo.id });
+            mutate(`/api/carts/${id}`);
+            setShoowPromoPopUp(false);
+        } catch (err) {
+            alert(err instanceof Error ? err.message : "Gagal menerapkan promo, coba lagi.");
         }
     };
 
@@ -119,8 +114,8 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                             <label className="flex flex-col gap-1 text-sm text-pale/70">
                                 Name
                                 <input
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={form.name}
+                                    onChange={(e) => update("name", e.target.value)}
                                     className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                     placeholder="Your name"
                                 />
@@ -129,8 +124,8 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                             <label className="flex flex-col gap-1 text-sm text-pale/70">
                                 Contact
                                 <input
-                                    value={contact}
-                                    onChange={(e) => setContact(e.target.value)}
+                                    value={form.contact}
+                                    onChange={(e) => update("contact", e.target.value)}
                                     className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                     placeholder="08xxxxxxxxxx"
                                 />
@@ -141,8 +136,8 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                                 <input
                                     type="date"
                                     lang="en-CA"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
+                                    value={form.date}
+                                    onChange={(e) => update("date", e.target.value)}
                                     className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                 />
                             </label>
@@ -152,9 +147,9 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                                 <input
                                     type="number"
                                     min={1}
-                                    value={seatsInput}
-                                    onChange={(e) => setSeatsInput(e.target.value)}
-                                    onBlur={() => setSeatsInput(String(seats))}
+                                    value={form.seatsInput}
+                                    onChange={(e) => update("seatsInput", e.target.value)}
+                                    onBlur={() => update("seatsInput", String(seats))}
                                     className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                 />
                             </label>
@@ -164,8 +159,8 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                                     Start
                                     <input
                                         type="time"
-                                        value={startTime}
-                                        onChange={(e) => setStartTime(e.target.value)}
+                                        value={form.startTime}
+                                        onChange={(e) => update("startTime", e.target.value)}
                                         className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                     />
                                 </label>
@@ -174,8 +169,8 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                                     Finish
                                     <input
                                         type="time"
-                                        value={finishTime}
-                                        onChange={(e) => setFinishTime(e.target.value)}
+                                        value={form.finishTime}
+                                        onChange={(e) => update("finishTime", e.target.value)}
                                         className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
                                     />
                                 </label>
@@ -193,7 +188,14 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                             price={price}
                             seats={seats}
                             duration={duration}
-                            total={total}
+                            total={finalTotal}
+                            discountName={selectedPromo?.name}
+                            discountValue={discountValue}
+                        />
+
+                        <PromoUsedCard
+                            selectedPromo={selectedPromo}
+                            onClick={() => setShoowPromoPopUp(true)}
                         />
 
                         <button
@@ -206,6 +208,16 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                     </div>
                 </div>
             </main>
+
+            {showPromoPopUp && (
+                <PromoPickerPopup
+                    promos={promotions}
+                    selectedId={cart.discount_id}
+                    isLoading={isPromosLoading}
+                    onSelect={handleSelectPromo}
+                    onClose={() => setShoowPromoPopUp(false)}
+                />
+            )}
 
             {showThanks && <CompletePopUp />}
         </>
