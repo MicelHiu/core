@@ -1,3 +1,5 @@
+"use client";
+
 import { RentSummary } from "@/components/user/cart/RentSummary";
 import UserSummary from "@/components/user/cart/UserSummary";
 import { CompletePopUp } from "@/components/user/cart/CompletePopUp";
