@@ -38,8 +38,8 @@ export function Footer() {
                 <section className="flex flex-col">
                     <h3 className="font-semibold mb-2 text-xl">Contact</h3>
                     <ul className="text-md text-ink">
-                        <li>📧 support@revoshop.id</li>
-                        <li>📞 +62 21 1234 5678</li>
+                        <li>📧 support@core.com</li>
+                        <li>📞 (+62)811-950-5559</li>
                         <li>📍 Jakarta, Indonesia</li>
                     </ul>
                 </section>
