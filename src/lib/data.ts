@@ -1,4 +1,3 @@
-import { backendFetch } from "./backend";
 
 //rooms
 export interface Room {
@@ -59,15 +58,16 @@ function mapBackendRoom(p: BackendRoom): Room {
     };
 }
 
+// lewat proxy Next.js (/api/rooms), bukan langsung ke Railway — browser kena CORS kalau langsung
 export async function fetchRooms(): Promise<Room[]> {
-    const res = await backendFetch('/rooms');
+    const res = await fetch('/api/rooms');
     const data: BackendRoom[] = await res.json();
     return data.map(mapBackendRoom);
 }
 
 export async function fetchRoomById(id: string): Promise<Room | null> {
     try {
-        const res = await backendFetch(`/rooms/${id}`);
+        const res = await fetch(`/api/rooms/${id}`);
         if(!res.ok) return null;
         const data: BackendRoom = await res.json();
         return mapBackendRoom(data);

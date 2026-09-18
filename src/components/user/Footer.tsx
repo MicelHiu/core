@@ -22,22 +22,16 @@ export function Footer() {
                             Home
                         </Link>
                         <Link
-                            href="/rooms"
+                            href="/promotion"
                             className="text-md font-medium text-ink hover:text-accent cursor-pointer"
                         >
-                            Products
+                            Promo
                         </Link>
                         <Link
-                            href="/cart"
+                            href="/contact"
                             className="text-md font-medium text-ink hover:text-accent cursor-pointer"
                         >
-                            Cart
-                        </Link>
-                        <Link
-                            href="/faq"
-                            className="text-md font-medium text-ink hover:text-accent cursor-pointer"
-                        >
-                            FAQ
+                            Contact
                         </Link>
                     </nav>
                 </section>
