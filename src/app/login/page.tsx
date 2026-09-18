@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 import { mutate } from 'swr';
 import Link from 'next/link';
 import { backendFetch } from '@/lib/backend';
+import { PasswordInput } from '@/components/auth/PasswordInput';
+import { ForgotPasswordModal } from '@/components/auth/ForgotPasswordModal';
 
 export default function login() {
     const [email, setEmail] =useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
 
     const router = useRouter();
 
@@ -56,7 +59,7 @@ export default function login() {
                         </div>
                     )}
 
-                    <form onSubmit={handleLoginSubmit} className='flex flex-col gap-4'>
+                    <form onSubmit={handleLoginSubmit} className='flex flex-col gap-4' autoComplete='off'>
                         <div className='flex flex-row justify-center items-center gap-2 mb-4 border-b border-lilac pb-4'>
                             <label htmlFor='email' className='mb-2 block text-sm font-medium text-pale'>
                                 Email Address
@@ -67,6 +70,7 @@ export default function login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder='enter your email address'
                                 required
+                                autoComplete='off'
                                 className='w-full rounded-lg border border-lilac px-4 py-3 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
                             />
                         </div>
@@ -75,13 +79,12 @@ export default function login() {
                             <label htmlFor='password' className='mb-2 block text-sm font-medium text-pale'>
                                 Password
                             </label>
-                            <input 
-                                type='password'
+                            <PasswordInput
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={setPassword}
                                 placeholder='enter your password'
                                 required
-                                className='w-full rounded-lg border border-lilac px-4 py-3 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
+                                className='w-full rounded-lg border border-lilac px-4 py-3 pr-10 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
                             />
                         </div>
 
@@ -96,11 +99,19 @@ export default function login() {
                             Don't have an account?  
                             <Link href="/login/register" className='underline px-2 hover:text-lilac'>
                                 Register here!
-                            </Link> 
+                            </Link>
                         </p>
+                        <button
+                            type="button"
+                            onClick={() => setShowForgotPassword(true)}
+                            className="text-sm text-pale/70 hover:text-lilac underline cursor-pointer"
+                        >
+                            Forgot Password?
+                        </button>
                     </form>
                 </section>
             </main>
+            {showForgotPassword && <ForgotPasswordModal onClose={() => setShowForgotPassword(false)} />}
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { formatPrice } from "@/lib/data";
+import { formatPrice, formatDateTime } from "@/lib/data";
 import { DiscountFromApi } from "@/lib/dataRoute";
 
 interface PromoPickerProps {
@@ -53,7 +53,7 @@ export function PromoPickerPopup({ promos, selectedId, isLoading, onSelect, onCl
                                 <div>
                                     <h3 className="font-semibold text-pale">{promo.name}</h3>
                                     {promo.valid_until && (
-                                        <p className="text-pale/40 text-xs mt-1">Valid until: {promo.valid_until}</p>
+                                        <p className="text-pale/40 text-xs mt-1">Valid until: {formatDateTime(promo.valid_until)}</p>
                                     )}
                                 </div>
                                 <span className="text-lg font-bold text-lilac shrink-0 ml-4">

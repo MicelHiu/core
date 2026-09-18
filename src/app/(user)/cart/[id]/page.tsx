@@ -3,6 +3,7 @@
 import { RentSummary } from "@/components/user/cart/RentSummary";
 import UserSummary from "@/components/user/cart/UserSummary";
 import { CompletePopUp } from "@/components/user/cart/CompletePopUp";
+import { ErrorPopUp } from "@/components/user/cart/ErrorPopUp";
 import { Navigation } from "@/components/user/Navigation";
 import { use, useState } from "react";
 import Link from "next/link";
@@ -17,10 +18,16 @@ import { PromoPickerPopup } from "@/components/user/cart/PromoPicker";
 import { useBookingForm } from "@/hooks/useBookingForm";
 import { useEffect } from "react";
 
+const HOUR_OPTIONS = Array.from({ length: 16 }, (_, i) => {
+    const hour = String(i + 8).padStart(2, "0"); // 08:00 s.d. 23:00
+    return `${hour}:00`;
+});
+
 export default function CartDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [showThanks, setShowThanks] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { cart, isLoading } = useCart(id);
     const { user } = useCurrentUser();
     const [room, setRoom] = useState<Room | null>(null);
@@ -84,7 +91,7 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
             mutate('/api/carts');
             setShowThanks(true);
         } catch (err) {
-            alert(err instanceof Error ? err.message : "Gagal konfirmasi booking, coba lagi.");
+            setErrorMessage(err instanceof Error ? err.message : "Gagal konfirmasi booking, coba lagi.");
         } finally {
             setIsSubmitting(false);
         }
@@ -96,7 +103,16 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
             mutate(`/api/carts/${id}`);
             setShoowPromoPopUp(false);
         } catch (err) {
-            alert(err instanceof Error ? err.message : "Gagal menerapkan promo, coba lagi.");
+            setErrorMessage(err instanceof Error ? err.message : "Gagal menerapkan promo, coba lagi.");
+        }
+    };
+
+    const handleRemovePromo = async () => {
+        try {
+            await updateCartItem(cart.id, { discount_id: null });
+            mutate(`/api/carts/${id}`);
+        } catch (err) {
+            setErrorMessage(err instanceof Error ? err.message : "Gagal menghapus promo, coba lagi.");
         }
     };
 
@@ -159,22 +175,28 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                             <div className="flex gap-4">
                                 <label className="flex flex-col gap-1 text-sm text-pale/70 flex-1">
                                     Start
-                                    <input
-                                        type="time"
+                                    <select
                                         value={form.startTime}
                                         onChange={(e) => update("startTime", e.target.value)}
                                         className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
-                                    />
+                                    >
+                                        {HOUR_OPTIONS.map((t) => (
+                                            <option key={t} value={t}>{t}</option>
+                                        ))}
+                                    </select>
                                 </label>
 
                                 <label className="flex flex-col gap-1 text-sm text-pale/70 flex-1">
                                     Finish
-                                    <input
-                                        type="time"
+                                    <select
                                         value={form.finishTime}
                                         onChange={(e) => update("finishTime", e.target.value)}
                                         className="rounded-lg bg-darkpurple border border-lilac/40 px-3 py-2 text-pale"
-                                    />
+                                    >
+                                        {HOUR_OPTIONS.map((t) => (
+                                            <option key={t} value={t}>{t}</option>
+                                        ))}
+                                    </select>
                                 </label>
                             </div>
 
@@ -198,6 +220,7 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                         <PromoUsedCard
                             selectedPromo={selectedPromo}
                             onClick={() => setShoowPromoPopUp(true)}
+                            onRemove={handleRemovePromo}
                         />
 
                         <button
@@ -222,6 +245,9 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
             )}
 
             {showThanks && <CompletePopUp />}
+            {errorMessage && (
+                <ErrorPopUp message={errorMessage} onClose={() => setErrorMessage(null)} />
+            )}
         </>
     );
 }

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useRegister } from '@/hooks/useRegister';
+import { PasswordInput } from '@/components/auth/PasswordInput';
 
 export default function register() {
     const [full_name, setFullName] = useState<string>("");
@@ -104,14 +105,13 @@ export default function register() {
                             <label htmlFor='password' className='mb-2 block text-sm font-medium text-pale'>
                                 Password
                             </label>
-                            <input
+                            <PasswordInput
                                 id='password'
-                                type='password'
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={setPassword}
                                 placeholder='Make your own password'
                                 required
-                                className='w-full rounded-lg border border-lilac px-4 py-3 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
+                                className='w-full rounded-lg border border-lilac px-4 py-3 pr-10 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
                             />
                         </div>
 

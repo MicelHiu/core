@@ -9,6 +9,7 @@ export interface Room {
     image: string;
     category: string;
     frequency: number;
+    stockToday: number;
 }
 
 export interface RoomsAdmin {
@@ -26,6 +27,14 @@ export const formatPrice = (price: number) => {
     }).format(price);
 }
 
+export function formatDateTime(iso: string) {
+    const d = new Date(iso);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const date = `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()}`;
+    const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    return `${date} ${time}`;
+}
+
 interface BackendRoom {
     id: string;
     name: string;
@@ -34,6 +43,7 @@ interface BackendRoom {
     image: string;
     type: string;
     stock: number;
+    stock_today: number;
 }
 
 function mapBackendRoom(p: BackendRoom): Room {
@@ -45,6 +55,7 @@ function mapBackendRoom(p: BackendRoom): Room {
         image: p.image,
         category: p.type,
         frequency: p.stock,
+        stockToday: p.stock_today,
     };
 }
 

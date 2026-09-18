@@ -28,13 +28,14 @@ export default function History() {
                             >
                                 <div className="flex justify-between items-center mb-2">
                                     <h2 className="font-bold text-pale">{b.rooms?.name ?? b.room_id}</h2>
+                                    <span className="text-xs uppercase font-semibold text-lilac">{b.status}</span>
+                                </div>
+                                <div className="flex justify-between items-center mb-2">
                                     <span className="text-sm text-pale/60">
                                         {new Date(b.created_at).toLocaleDateString("id-ID")}
                                     </span>
+                                    <span className="text-xs text-pale/40">{b.code}</span>
                                 </div>
-                                <p className="text-sm text-pale/70 pb-1">
-                                    {b.code}
-                                </p>
                                 <p className="text-sm text-pale/70">
                                     {new Date(b.date_play).toLocaleDateString("id-ID")} · {b.time_start.slice(0, 5)}–{b.time_end.slice(0, 5)} · {b.quantity} seat(s)
                                 </p>

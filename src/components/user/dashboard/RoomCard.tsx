@@ -19,6 +19,7 @@ export function RoomCard({ room }: RoomCardProps) {
                 <h3 className="font-semibold text-sm line-clamp-1">{room.name}</h3>
                 <p className="text-gray-500 text-xs mt-1 line-clamp-2">{room.description}</p>
                 <p className="font-bold mt-2">{formatPrice(room.price)}/hour</p>
+                <p className="text-gray-500 text-xs mt-1">Stock today: {room.stockToday}</p>
             </div>
         </Link>
     );

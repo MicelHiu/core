@@ -1,25 +1,26 @@
+"use client";
+import useSWR from "swr";
 import { DiscountFromApi, getPromotions } from "@/lib/dataRoute";
-import { useEffect, useState } from "react";
+
+const fetcher = () => getPromotions();
 
 interface usePromotionsResult {
     promotions: DiscountFromApi[];
     isLoading: boolean;
     error: Error | null;
+    refetch: () => void;
 }
 
 export function usePromotions(): usePromotionsResult {
-    const [promotions, setPromotions] = useState<DiscountFromApi[]>([]);
-    const [isLoading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
-    
-    useEffect(() => {
-        getPromotions()
-            .then(setPromotions)
-            .catch((err) => {
-                setError(err instanceof Error ? err: new Error("Failed to load promotions"));
-            })
-            .finally(() => setLoading(false));
-    }, []);
+    const { data: promotions, isLoading, error, mutate } = useSWR<DiscountFromApi[]>(
+        "/api/promotions",
+        fetcher
+    );
 
-    return { promotions, isLoading, error};
+    return {
+        promotions: promotions ?? [],
+        isLoading,
+        error: error ?? null,
+        refetch: () => mutate(),
+    };
 }

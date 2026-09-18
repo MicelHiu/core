@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CartEntry } from "@/lib/dataRoute";
 
 export interface BookingForm {
@@ -21,6 +21,7 @@ const initialForm: BookingForm = {
 
 export function useBookingForm(cart: CartEntry | undefined, user: { full_name?: string; contact?: string } | undefined) {
     const [form, setForm] = useState<BookingForm>(initialForm);
+    const seededCartId = useRef<string | null>(null);
 
     const update = <K extends keyof BookingForm>(key: K, value: BookingForm[K]) => {
         setForm((prev) => ({ ...prev, [key]: value }));
@@ -37,6 +38,8 @@ export function useBookingForm(cart: CartEntry | undefined, user: { full_name?: 
 
     useEffect(() => {
         if (!cart) return;
+        if (seededCartId.current === cart.id) return;
+        seededCartId.current = cart.id;
         setForm((prev) => ({
             ...prev,
             seatsInput: String(cart.quantity),

@@ -98,9 +98,9 @@ export default function ActivityLogsModal({ bookingCode, currentStatus, onClose,
                             onChange={(e) => setStatus(e.target.value)}
                             className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-sm"
                         >
-                            <option value="" disabled>Activity Type</option>
+                            <option value="" disabled className="bg-darkpurple text-pale/60">Activity Type</option>
                             {availableStatuses.map((s) => (
-                                <option key={s} value={s} className="capitalize">{s}</option>
+                                <option key={s} value={s} className="bg-darkpurple text-pale capitalize">{s}</option>
                             ))}
                         </select>
                         <input

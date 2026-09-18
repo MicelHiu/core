@@ -19,7 +19,7 @@ export interface VisitorEntry {
     booking_code: string;
     user_id: string;
     guest_name: string;
-    checked_in: string;
+    checked_in: string | null;
     created_at: string;
     bookings: {
         code: string;
@@ -43,11 +43,14 @@ export function useVisitorStats(params: { groupBy: "day" | "month" | "year"; yea
     return { stats: stats ?? [], isLoading, error };
 }
 
-export function useVisitors(params: { from: string; to: string }) {
-    const query = new URLSearchParams({ from: params.from, to: params.to }).toString();
+export function useVisitors(params: { from?: string; to?: string }) {
+    const entries: [string, string][] = [];
+    if (params.from) entries.push(["from", params.from]);
+    if (params.to) entries.push(["to", params.to]);
+    const query = new URLSearchParams(entries).toString();
 
     const { data: visitors, isLoading, error, mutate } = useSWR<VisitorEntry[]>(
-        `/api/admin/visitors?${query}`,
+        `/api/admin/visitors${query ? `?${query}` : ""}`,
         fetcher
     );
 

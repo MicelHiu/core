@@ -107,7 +107,9 @@ export default function VisitorsTable() {
                                         <td className="py-2 pr-4">{v.guest_name}</td>
                                         <td className="py-2 pr-4">{v.booking_code}</td>
                                         <td className="py-2 pr-4 capitalize">{v.bookings.status}</td>
-                                        <td className="py-2 pr-4">{new Date(v.checked_in).toLocaleString("id-ID")}</td>
+                                        <td className="py-2 pr-4">
+                                            {v.checked_in ? new Date(v.checked_in).toLocaleString("id-ID") : <span className="text-pale/40">Not checked in</span>}
+                                        </td>
                                         <td className="py-2 pr-4">
                                             <VisitorRowActions
                                                 onOpenLogs={() => setLogsFor({ code: v.booking_code, status: v.bookings.status })}

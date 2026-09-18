@@ -125,7 +125,7 @@ export interface CreateCartPayload {
     discount_id?: string;
 }
 
-export type UpdateCartPayload = Partial<CreateCartPayload>;
+export type UpdateCartPayload = Partial<CreateCartPayload> & { discount_id?: string | null };
 
 export async function fetchCarts(): Promise<CartEntry[]> {
     const res = await fetch("/api/carts");

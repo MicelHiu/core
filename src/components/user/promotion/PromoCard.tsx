@@ -1,4 +1,4 @@
-import { formatPrice } from "@/lib/data";
+import { formatPrice, formatDateTime } from "@/lib/data";
 import { DiscountFromApi } from "@/lib/dataRoute";
 
 interface PromoCardProps {
@@ -14,10 +14,10 @@ export function PromoCard({ promo }: PromoCardProps) {
                     <p className="text-pale/60 text-sm mt-1">{promo.id}</p>
                 )}
                 {promo.valid_from && (
-                    <p className="text-pale/40 text-xs mt-1">From: {promo.valid_from}</p>
+                    <p className="text-pale/40 text-xs mt-1">From: {formatDateTime(promo.valid_from)}</p>
                 )}
                 {promo.valid_until && (
-                    <p className="text-pale/40 text-xs mt-1">Valid until: {promo.valid_until}</p>
+                    <p className="text-pale/40 text-xs mt-1">Valid until: {formatDateTime(promo.valid_until)}</p>
                 )}
             </div>
             <span className="text-2xl font-bold text-lilac shrink-0 ml-4">
