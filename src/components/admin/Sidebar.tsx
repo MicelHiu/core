@@ -56,10 +56,10 @@ export default function Sidebar() {
     }
 
     return (
-        <aside className="w-64 shrink-0 bg-darkpurple border-r border-lilac/20 flex flex-col">
-            <div className="px-6 py-6 border-b border-lilac/20">
-                <h1 className="text-xl font-extrabold text-lilac">Admin</h1>
-                <p className="text-xs text-pale/60 mt-1">Core Management</p>
+        <aside className="w-64 shrink-0 bg-surface border-r border-ink/10 flex flex-col">
+            <div className="px-6 py-6 border-b border-ink/10">
+                <h1 className="text-xl font-extrabold text-ink">Admin</h1>
+                <p className="text-xs text-ink/70 mt-1">Core Management</p>
             </div>
 
             <nav className="flex flex-col gap-1 p-4">
@@ -72,8 +72,8 @@ export default function Sidebar() {
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                                 isActive
-                                    ? "bg-purple-light/20 text-lilac"
-                                    : "text-pale/70 hover:text-pale hover:bg-purple-light/10"
+                                    ? "bg-tint/20 text-accent"
+                                    : "text-ink/70 hover:text-ink hover:bg-tint/10"
                             }`}
                         >
                             {item.icon}
@@ -83,10 +83,10 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            <div className="mt-auto p-4 border-t border-lilac/20">
+            <div className="mt-auto p-4 border-t border-ink/10">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-pale/70 hover:text-pale hover:bg-red-500/10 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-ink/70 hover:text-ink hover:bg-red-500/10 transition-colors"
                 >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -36,9 +36,9 @@ export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
                 time_end: "10:00",
             });
             mutate('/api/carts');
-            showToast(`${room.name} ditambahkan ke cart!`);
+            showToast(`${room.name} added to cart!`);
         } catch {
-            showToast("Gagal menambahkan ke cart, coba lagi.");
+            showToast("Failed to add to cart. Please try again.");
         } finally {
             setIsAdding(false);
         }
@@ -71,7 +71,7 @@ export function RoomInfo({ room, isLoggedIn }: RoomInfoProps) {
                     <button
                         onClick={handleAddToCart}
                         disabled={isAdding}
-                        className="mt-4 w-fit bg-purple text-pale px-8 py-3 rounded-full hover:bg-lilac hover:text-darkpurple transition text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="mt-4 w-fit bg-cta text-cta-ink px-8 py-3 rounded-full hover:brightness-90 transition text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {!isLoggedIn ? "Login to Book" : isAdding ? "Adding..." : "Book Room"}
                     </button>

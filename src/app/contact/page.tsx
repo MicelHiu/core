@@ -13,15 +13,15 @@ export default function ContactPage() {
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:items-start">
           {/* Left column */}
           <div>
-            <span className="inline-block rounded-full border border-lilac px-4 py-1 text-sm text-pale">
+            <span className="inline-block rounded-full border border-accent px-4 py-1 text-sm text-ink">
               Contact us
             </span>
 
-            <h1 className="mt-6 font-heading text-4xl text-pale md:text-5xl">
+            <h1 className="mt-6 font-heading text-4xl text-ink md:text-5xl">
               We&apos;re here to help
             </h1>
 
-            <p className="mt-4 max-w-md text-pale/70">
+            <p className="mt-4 max-w-md text-ink/70">
               Need support or have a question? We&apos;re here to help. Email,
               call, or visit us directly to learn how our warnet can solve
               your problem.
@@ -30,14 +30,14 @@ export default function ContactPage() {
             <div className="mt-8 flex flex-col gap-4">
               {/* Email */}
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-lilac">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-accent">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="h-5 w-5 text-lilac"
+                    className="h-5 w-5 text-accent"
                   >
                     <path
                       strokeLinecap="round"
@@ -46,19 +46,19 @@ export default function ContactPage() {
                     />
                   </svg>
                 </span>
-                <span className="text-pale">support@core.com</span>
+                <span className="text-ink">support@core.com</span>
               </div>
 
               {/* Phone */}
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-lilac">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-accent">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="h-5 w-5 text-lilac"
+                    className="h-5 w-5 text-accent"
                   >
                     <path
                       strokeLinecap="round"
@@ -67,35 +67,35 @@ export default function ContactPage() {
                     />
                   </svg>
                 </span>
-                <span className="text-pale">(+62) 811-950-5559</span>
+                <span className="text-ink">(+62) 811-950-5559</span>
               </div>
 
               {/* Hours */}
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-lilac">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-accent">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="h-5 w-5 text-lilac"
+                    className="h-5 w-5 text-accent"
                   >
                     <circle cx="12" cy="12" r="9" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 3" />
                   </svg>
                 </span>
-                <span className="text-pale">Every day, 24 hours</span>
+                <span className="text-ink">Every day, 24 hours</span>
               </div>
             </div>
           </div>
 
           {/* Right column - GPS/location card replacing "Let's talk" */}
-          <div className="rounded-2xl border border-lilac bg-purple/30 p-6">
-            <h2 className="font-heading text-2xl text-pale">Find us here</h2>
-            <p className="mt-1 text-sm text-pale/70">CORE</p>
+          <div className="rounded-2xl border border-accent bg-tint/20 p-6">
+            <h2 className="font-heading text-2xl text-ink">Find us here</h2>
+            <p className="mt-1 text-sm text-ink/70">CORE</p>
 
-            <div className="mt-4 overflow-hidden rounded-xl border border-lilac">
+            <div className="mt-4 overflow-hidden rounded-xl border border-accent">
               <iframe
                 src={MAPS_EMBED_URL}
                 width="100%"
@@ -111,7 +111,7 @@ export default function ContactPage() {
               href={MAPS_LINK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-block w-full rounded-lg bg-lilac py-3 text-center font-semibold text-darkpurple hover:bg-pale"
+              className="mt-4 inline-block w-full rounded-lg bg-cta py-3 text-center font-semibold text-cta-ink hover:brightness-90"
             >
               Open in Google Maps
             </a>

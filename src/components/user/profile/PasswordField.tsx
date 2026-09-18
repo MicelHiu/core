@@ -4,16 +4,16 @@ export function PasswordField({ value }: { value?: string }) {
     const [visible, setVisible] = useState(false);
 
     return (
-        <div className="flex items-center justify-between border-b border-lilac/30 py-3">
-            <span className="text-sm font-medium text-pale/70">Password</span>
+        <div className="flex items-center justify-between border-b border-accent/30 py-3">
+            <span className="text-sm font-medium text-ink/70">Password</span>
             <div className="flex items-center gap-2">
-                <span className="text-base font-semibold text-pale">
+                <span className="text-base font-semibold text-ink">
                     {visible ? value ?? "-" : "•".repeat(value?.length ?? 8)}
                 </span>
                 <button
                     type="button"
                     onClick={() => setVisible((v) => !v)}
-                    className="text-pale/70 hover:text-lilac transition-colors cursor-pointer"
+                    className="text-ink/70 hover:text-accent transition-colors cursor-pointer"
                     aria-label={visible ? "Hide password" : "Show password"}
                 >
                     {visible ? (

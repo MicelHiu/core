@@ -12,12 +12,12 @@ export default function UserSummary() {
     ]
 
     return (
-        <section className="max-w-md bg-darkpurple/60 border border-lilac/40 rounded-2xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-pale mb-6 text-center">Your Info</h2>
+        <section className="max-w-md bg-surface/60 border border-accent/40 rounded-2xl p-8 shadow-xl">
+            <h2 className="text-2xl font-bold text-ink mb-6 text-center">Your Info</h2>
             {fields.map((fields) => (
-                <div key={fields.label} className="flex items-center justify-between border-b border-lilac/30 py-3">
-                    <span className="text-sm font-medium text-pale/70">{fields.label}</span>
-                    <span className="text-base font-semibold text-pale">{fields.value ?? "-"}</span>
+                <div key={fields.label} className="flex items-center justify-between border-b border-accent/30 py-3">
+                    <span className="text-sm font-medium text-ink/70">{fields.label}</span>
+                    <span className="text-base font-semibold text-ink">{fields.value ?? "-"}</span>
                 </div>
             ))}
         </section>

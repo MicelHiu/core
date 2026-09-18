@@ -1,59 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0e20;
-  --foreground: #c8b3f6;
+  --bg: #f5f0fa;        /* background halaman (lavender putih) */
+  --surface: #ffffff;   /* kartu, modal, input, navbar */
+  --ink: #16101f;       /* teks utama */
+  --accent: #8b2fd9;    /* ungu GTA: link, border, chart */
+  --accent-2: #d926a9;  /* magenta: gradien */
+  --tint: #b794f4;      /* latar lembut */
+  --cta: #e3f56c;       /* tombol lime */
+  --cta-ink: #16101f;   /* teks di atas lime */
+}
 
-  --darkpurple: #0d0e20;
-  --purple: #2d1c7f;
-  --purple-light: #4b32b8;
-  --lilac: #7546e8;
-  --pale: #c8b3f6;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #140a24;
+    --surface: #1e1033;
+    --ink: #f3e8ff;
+    --accent: #c77dff;
+    --accent-2: #e052c4;
+    --tint: #7b3fe4;
+  }
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-heading: var(--font-audiowide);
   --font-body: var(--font-chakra);
-  --color-darkpurple: var(--darkpurple);
-  --color-purple: var(--purple);
-  --color-purple-light: var(--purple-light);
-  --color-lilac: var(--lilac);
-  --color-pale: var(--pale);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-tint: var(--tint);
+  --color-cta: var(--cta);
+  --color-cta-ink: var(--cta-ink);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-body), Arial, sans-serif;
 }
 
 input[type="date"],
 input[type="time"] {
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(1.5);
   cursor: pointer;
 }
 
+@media (prefers-color-scheme: dark) {
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+  }
+}
+
 .warnet-bg {
-  background-color: #0D0E20;
+  background-color: var(--bg);
   background-image:
-    /* radial glow */
-    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(45, 28, 127, 0.5) 0%, transparent 70%),
+    /* glow magenta & ungu */
+    radial-gradient(ellipse 60% 50% at 85% 10%, color-mix(in srgb, var(--accent-2) 18%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 70%),
     /* grid lines */
-    linear-gradient(rgba(117, 70, 232, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(117, 70, 232, 0.07) 1px, transparent 1px);
-  background-size: 100% 100%, 32px 32px, 32px 32px;
+    linear-gradient(color-mix(in srgb, var(--accent) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 6%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
 }

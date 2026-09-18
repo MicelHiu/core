@@ -30,7 +30,7 @@ export function PasswordInput({ id, value, onChange, placeholder, className, req
             <button
                 type="button"
                 onClick={() => setShow((s) => !s)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-pale/60 hover:text-pale cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink cursor-pointer"
                 tabIndex={-1}
             >
                 {show ? "🙈" : "👁"}

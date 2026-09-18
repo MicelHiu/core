@@ -5,7 +5,7 @@ export function RoomDetailSkeleton() {
         <>
             <Navigation />
             <main className="flex items-center justify-center min-h-screen">
-                <p className="animate-pulse text-pale">Loading...</p>
+                <p className="animate-pulse text-ink">Loading...</p>
             </main>
         </>
     )

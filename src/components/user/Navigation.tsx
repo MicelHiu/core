@@ -37,25 +37,25 @@ export function Navigation() {
     }
 
     return (
-        <header className="bg-darkpurple relative flex flex-row items-center justify-between w-full border-b border-lilac px-8 py-4">
-            <h1 className="font-bold text-pale text-2xl">CORE</h1>
+        <header className="bg-surface relative flex flex-row items-center justify-between w-full border-b border-accent px-8 py-4">
+            <h1 className="font-bold text-ink text-2xl">CORE</h1>
 
-            <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 text-pale">
+            <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 text-ink">
                 <Link 
                     href="/dashboard"
-                    className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                    className="text-sm font-medium text-ink hover:text-accent cursor-pointer"
                 >
                     Home
                 </Link>
                 <Link 
                     href="/promotion"
-                    className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                    className="text-sm font-medium text-ink hover:text-accent cursor-pointer"
                 >
                     Promo
                 </Link>
                 <Link 
                     href="/contact"
-                    className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                    className="text-sm font-medium text-ink hover:text-accent cursor-pointer"
                 >
                     Contact Us
                 </Link>
@@ -67,7 +67,7 @@ export function Navigation() {
                 <div className="flex flex-row gap-8">
                     <Link 
                         href="/cart"
-                        className="relative text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                        className="relative text-sm font-medium text-ink hover:text-accent cursor-pointer"
                     >
                         <svg
                             width="24"
@@ -97,7 +97,7 @@ export function Navigation() {
                     </Link>
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
-                            <button className="text-sm font-medium text-pale hover:text-lilac cursor-pointer outline-none">
+                            <button className="text-sm font-medium text-ink hover:text-accent cursor-pointer outline-none">
                                 <svg
                                     width="24"
                                     height="24"
@@ -125,12 +125,12 @@ export function Navigation() {
                             <DropdownMenu.Content
                                 align="end"
                                 sideOffset={8}
-                                className="w-40 bg-darkpurple border border-lilac/40 rounded-lg shadow-xl overflow-hidden z-50"
+                                className="w-40 bg-surface border border-accent/40 rounded-lg shadow-xl overflow-hidden z-50"
                             >
                                 <DropdownMenu.Item asChild>
                                     <Link 
                                         href="/profile"
-                                        className="block px-4 py-2 text-sm text-pale hover:bg-lilac/20 outline-none cursor-pointer"
+                                        className="block px-4 py-2 text-sm text-ink hover:bg-accent/20 outline-none cursor-pointer"
                                     >
                                         Profile
                                     </Link>
@@ -138,7 +138,7 @@ export function Navigation() {
                                 <DropdownMenu.Item asChild>
                                     <Link 
                                         href="/history"
-                                        className="block px-4 py-2 text-sm text-pale hover:bg-lilac/20 outline-none cursor-pointer"
+                                        className="block px-4 py-2 text-sm text-ink hover:bg-accent/20 outline-none cursor-pointer"
                                     >
                                         History
                                     </Link>
@@ -148,7 +148,7 @@ export function Navigation() {
                     </DropdownMenu.Root>
                     <button
                         onClick={handleSignOut}
-                        className="text-sm font-medium bg-red-500 px-2 py-1 rounded-lg text-pale hover:bg-darkpurple cursor-pointer"
+                        className="text-sm font-medium bg-red-500 px-2 py-1 rounded-lg text-white hover:bg-red-600 cursor-pointer"
                     >
                         Logout
                     </button>
@@ -156,22 +156,22 @@ export function Navigation() {
             ) : (
                 <Link
                     href="/login"
-                    className="text-sm font-medium text-pale hover:text-lilac cursor-pointer"
+                    className="text-sm font-medium text-ink hover:text-accent cursor-pointer"
                 >
                     Login
                 </Link>
             )}
 
             {error && (
-                <div className="fixed inset-0 bg-pale flex items-center justify-center z-50" onClick={() => setError(null)}>
-                    <div className="bg-white rounded-lg p-6 w-80 shadow-lg" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="font-semibold text-lg mb-2 text-darkpurple">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setError(null)}>
+                    <div className="bg-surface rounded-lg p-6 w-80 shadow-lg" onClick={(e) => e.stopPropagation()}>
+                        <h3 className="font-semibold text-lg mb-2 text-ink">
                             Something went wrong:
                         </h3>
-                        <p className="text-sm text-darkpurple mb-4">{error}</p>
+                        <p className="text-sm text-ink mb-4">{error}</p>
                         <button
                             onClick={() => setError(null)}
-                            className="w-full bg-lilac hover:bg-purple text-darkpurple py-2 rounded-md"
+                            className="w-full bg-cta hover:brightness-90 text-cta-ink py-2 rounded-md"
                         >
                             OK
                         </button>

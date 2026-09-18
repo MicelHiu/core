@@ -12,28 +12,28 @@ export default function VisitorsPreview() {
     const { visitors, isLoading, error } = useVisitors({ from: today, to: today });
 
     return (
-        <div className="bg-purple-light/10 border border-lilac/20 rounded-xl p-5">
+        <div className="bg-surface border border-ink/10 shadow-sm rounded-xl p-5">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-pale">Checking in today</h3>
+                <h3 className="text-sm font-semibold text-ink">Checking in today</h3>
                 <Link
                     href="/admin/visitors"
-                    className="text-xs font-medium text-lilac hover:text-pale transition-colors"
+                    className="text-xs font-medium text-accent hover:text-ink transition-colors"
                 >
                     See all visitors →
                 </Link>
             </div>
 
-            {isLoading && <p className="text-pale/60 text-sm">Loading...</p>}
-            {error && <p className="text-red-400 text-sm">Failed to load visitors.</p>}
+            {isLoading && <p className="text-ink/70 text-sm">Loading...</p>}
+            {error && <p className="text-red-600 dark:text-red-400 text-sm">Failed to load visitors.</p>}
 
             {!isLoading && !error && (
                 visitors.length === 0 ? (
-                    <p className="text-pale/60 text-sm">No visitors checking in today.</p>
+                    <p className="text-ink/70 text-sm">No visitors checking in today.</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead>
-                                <tr className="border-b border-lilac/20 text-pale/60">
+                                <tr className="border-b border-ink/10 text-ink/70">
                                     <th className="py-2 pr-4 font-medium">User ID</th>
                                     <th className="py-2 pr-4 font-medium">Guest Name</th>
                                     <th className="py-2 pr-4 font-medium">Booking Code</th>
@@ -42,7 +42,7 @@ export default function VisitorsPreview() {
                             </thead>
                             <tbody>
                                 {visitors.map((v) => (
-                                    <tr key={v.id} className="border-b border-lilac/10 text-pale">
+                                    <tr key={v.id} className="border-b border-ink/5 text-ink">
                                         <td className="py-2 pr-4 truncate max-w-[160px]">{v.user_id}</td>
                                         <td className="py-2 pr-4">{v.guest_name}</td>
                                         <td className="py-2 pr-4">{v.booking_code}</td>

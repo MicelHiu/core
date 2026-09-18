@@ -24,8 +24,8 @@ export default function Profile() {
         <>
             <Navigation />
             <main className="warnet-bg min-h-screen flex items-center justify-center px-4 py-16">
-                <section className="w-full max-w-md bg-darkpurple/60 border border-lilac/40 rounded-2xl p-8 shadow-xl">
-                    <h2 className="text-2xl font-bold text-pale mb-6 text-center">My Profile</h2>
+                <section className="w-full max-w-md bg-surface/60 border border-accent/40 rounded-2xl p-8 shadow-xl">
+                    <h2 className="text-2xl font-bold text-ink mb-6 text-center">My Profile</h2>
                     <div className="flex flex-col">
                         {fields.map((f) => (
                             <ProfileField key={f.label} {...f} />

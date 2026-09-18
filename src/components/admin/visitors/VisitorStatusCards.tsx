@@ -53,7 +53,7 @@ export default function VisitorStatusCards() {
                         key={option.mode}
                         onClick={() => setMode(option.mode)}
                         className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${
-                            mode === option.mode ? "bg-lilac/20 text-lilac" : "bg-pale/10 text-pale/50"
+                            mode === option.mode ? "bg-accent/20 text-accent" : "bg-ink/10 text-ink/70"
                         }`}
                     >
                         {option.label}
@@ -63,12 +63,12 @@ export default function VisitorStatusCards() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {STATUSES.map((status) => (
-                    <div key={status} className="bg-purple-light/10 border border-lilac/20 rounded-xl p-5">
-                        <p className="text-sm font-semibold text-pale capitalize">{status}</p>
-                        <p className="text-3xl font-extrabold text-lilac mt-2">
+                    <div key={status} className="bg-surface border border-ink/10 shadow-sm rounded-xl p-5">
+                        <p className="text-sm font-semibold text-ink capitalize">{status}</p>
+                        <p className="text-3xl font-extrabold text-accent mt-2">
                             {isLoading ? "-" : error ? "!" : countByStatus.get(status) ?? 0}
                         </p>
-                        <p className="text-xs text-pale/60 mt-1">{caption}</p>
+                        <p className="text-xs text-ink/70 mt-1">{caption}</p>
                     </div>
                 ))}
             </div>

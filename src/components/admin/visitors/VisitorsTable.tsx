@@ -37,24 +37,24 @@ export default function VisitorsTable() {
         : visitors.filter((v) => v.bookings.status === statusFilter);
 
     return (
-        <div className="bg-purple-light/10 border border-lilac/20 rounded-xl p-5">
+        <div className="bg-surface border border-ink/10 shadow-sm rounded-xl p-5">
             <div className="flex items-center gap-4 mb-4">
-                <label className="text-xs text-pale/60 flex items-center gap-2">
+                <label className="text-xs text-ink/70 flex items-center gap-2">
                     From
                     <input
                         type="date"
                         value={from}
                         onChange={(e) => setFrom(e.target.value)}
-                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-xs"
+                        className="bg-bg border border-ink/15 rounded px-2 py-1 text-ink text-xs"
                     />
                 </label>
-                <label className="text-xs text-pale/60 flex items-center gap-2">
+                <label className="text-xs text-ink/70 flex items-center gap-2">
                     To
                     <input
                         type="date"
                         value={to}
                         onChange={(e) => setTo(e.target.value)}
-                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-xs"
+                        className="bg-bg border border-ink/15 rounded px-2 py-1 text-ink text-xs"
                     />
                 </label>
             </div>
@@ -63,7 +63,7 @@ export default function VisitorsTable() {
                 <button
                     onClick={() => setStatusFilter("all")}
                     className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${
-                        statusFilter === "all" ? "bg-lilac/20 text-lilac" : "bg-pale/10 text-pale/50"
+                        statusFilter === "all" ? "bg-accent/20 text-accent" : "bg-ink/10 text-ink/70"
                     }`}
                 >
                     All ({visitors.length})
@@ -73,7 +73,7 @@ export default function VisitorsTable() {
                         key={status}
                         onClick={() => setStatusFilter(status)}
                         className={`text-xs font-medium px-3 py-1.5 rounded-full capitalize transition-colors ${
-                            statusFilter === status ? "bg-lilac/20 text-lilac" : "bg-pale/10 text-pale/50"
+                            statusFilter === status ? "bg-accent/20 text-accent" : "bg-ink/10 text-ink/70"
                         }`}
                     >
                         {status} ({countByStatus.get(status) ?? 0})
@@ -81,17 +81,17 @@ export default function VisitorsTable() {
                 ))}
             </div>
 
-            {isLoading && <p className="text-pale/60 text-sm">Loading...</p>}
-            {error && <p className="text-red-400 text-sm">Failed to load visitors.</p>}
+            {isLoading && <p className="text-ink/70 text-sm">Loading...</p>}
+            {error && <p className="text-red-600 dark:text-red-400 text-sm">Failed to load visitors.</p>}
 
             {!isLoading && !error && (
                 filteredVisitors.length === 0 ? (
-                    <p className="text-pale/60 text-sm">No visitors in this range.</p>
+                    <p className="text-ink/70 text-sm">No visitors in this range.</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead>
-                                <tr className="border-b border-lilac/20 text-pale/60">
+                                <tr className="border-b border-ink/10 text-ink/70">
                                     <th className="py-2 pr-4 font-medium">User ID</th>
                                     <th className="py-2 pr-4 font-medium">Guest Name</th>
                                     <th className="py-2 pr-4 font-medium">Booking Code</th>
@@ -102,13 +102,13 @@ export default function VisitorsTable() {
                             </thead>
                             <tbody>
                                 {filteredVisitors.map((v) => (
-                                    <tr key={v.id} className="border-b border-lilac/10 text-pale">
+                                    <tr key={v.id} className="border-b border-ink/5 text-ink">
                                         <td className="py-2 pr-4 truncate max-w-[160px]">{v.user_id}</td>
                                         <td className="py-2 pr-4">{v.guest_name}</td>
                                         <td className="py-2 pr-4">{v.booking_code}</td>
                                         <td className="py-2 pr-4 capitalize">{v.bookings.status}</td>
                                         <td className="py-2 pr-4">
-                                            {v.checked_in ? new Date(v.checked_in).toLocaleString("id-ID") : <span className="text-pale/40">Not checked in</span>}
+                                            {v.checked_in ? new Date(v.checked_in).toLocaleString("id-ID") : <span className="text-ink/60">Not checked in</span>}
                                         </td>
                                         <td className="py-2 pr-4">
                                             <VisitorRowActions

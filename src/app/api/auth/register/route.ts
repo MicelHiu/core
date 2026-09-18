@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     //validasi input
     if(!body.full_name || !body.nickname || !body.email || !body.contact || !body.password) {
         return NextResponse.json(
-            {error: "Data Incomplete, please fill all required fields."},
+            {error: "Incomplete data. Please fill in all required fields."},
             {status: 400}
         );
     }

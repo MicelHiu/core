@@ -18,7 +18,7 @@ export function useRoomDetail(id: string): useRoomDetailResult {
             if(!data) setError ("Room not found.");
             else setRoom(data);
         })
-        .catch(() => setError("Room loading failed. Please try again"))
+        .catch(() => setError("Failed to load room. Please try again."))
         .finally(() => setIsLoading(false));
     }, [id]);
 

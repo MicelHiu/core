@@ -25,22 +25,22 @@ export default function VisitorRowActions({ onOpenLogs, onOpenDetails }: Visitor
         <div className="relative inline-block" ref={ref}>
             <button
                 onClick={() => setOpen((o) => !o)}
-                className="text-pale/60 hover:text-pale px-2 py-1 rounded hover:bg-pale/10 transition-colors"
+                className="text-ink/70 hover:text-ink px-2 py-1 rounded hover:bg-ink/10 transition-colors"
                 aria-label="Actions"
             >
                 •••
             </button>
             {open && (
-                <div className="absolute right-0 mt-1 w-40 bg-darkpurple border border-lilac/20 rounded-lg shadow-xl z-10 overflow-hidden">
+                <div className="absolute right-0 mt-1 w-40 bg-surface border border-ink/10 rounded-lg shadow-xl z-10 overflow-hidden">
                     <button
                         onClick={() => { setOpen(false); onOpenLogs(); }}
-                        className="w-full text-left text-sm text-pale px-3 py-2 hover:bg-lilac/10 transition-colors"
+                        className="w-full text-left text-sm text-ink px-3 py-2 hover:bg-accent/10 transition-colors"
                     >
                         Activity Logs
                     </button>
                     <button
                         onClick={() => { setOpen(false); onOpenDetails(); }}
-                        className="w-full text-left text-sm text-pale px-3 py-2 hover:bg-lilac/10 transition-colors"
+                        className="w-full text-left text-sm text-ink px-3 py-2 hover:bg-accent/10 transition-colors"
                     >
                         Details
                     </button>

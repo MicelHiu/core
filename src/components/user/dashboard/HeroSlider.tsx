@@ -38,7 +38,7 @@ export function HeroSlider({ rooms }: HeroSliderProps) {
                         width={800}
                         height={700}
                     />
-                    <div className="w-1/2 flex flex-col justify-center px-12 gap-3 bg-purple">
+                    <div className="w-1/2 flex flex-col justify-center px-12 gap-3 bg-linear-to-br from-accent to-accent-2 text-white">
                         <span className="text-xs font-semibold uppercase tracking-widest">
                             {room.category}
                         </span>
@@ -47,7 +47,7 @@ export function HeroSlider({ rooms }: HeroSliderProps) {
                         <p className="text-xl font-bold">{formatPrice(room.price)}/hour</p>
                         <Link 
                             href={`/rooms/${room.id}`}
-                            className="mt-2 w-fit text-sm px-6 py-2 rounded-full hover:opasity-700 transition"
+                            className="mt-2 w-fit text-sm px-6 py-2 rounded-full bg-cta text-cta-ink hover:opasity-700 transition"
                         >
                             More Details →
                         </Link>
@@ -60,7 +60,7 @@ export function HeroSlider({ rooms }: HeroSliderProps) {
                         <button 
                             key={i}
                             onClick={() => setSlide(i)}
-                            className={`w-2 h-2 rounded-full transition-all ${i === slide ? "bg-lilac" : "bg-darkpurple"}`}
+                            className={`w-2 h-2 rounded-full transition-all ${i === slide ? "bg-cta" : "bg-white/40"}`}
                         />
                     ))}
                 </div>

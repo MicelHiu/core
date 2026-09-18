@@ -7,9 +7,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     if (!user) redirect("/login");
 
     return (
-        <div className="min-h-screen flex bg-darkpurple">
+        <div className="min-h-screen flex bg-bg">
             <Sidebar />
-            <main className="flex-1 p-8 text-pale">{children}</main>
+            <main className="flex-1 p-8 text-ink">{children}</main>
         </div>
     );
 }

@@ -46,11 +46,11 @@ export default function login() {
 
     return (
         <>
-            <main className="min-h-screen justify-center items-center bg-darkpurple flex flex-col">
-                <section className='flex flex-col justify-center align-center w-full shadow-2xl shadow-pale p-12 gap-4 rounded-2xl max-w-md text-center bg-darkpurple text-pale'>
+            <main className="min-h-screen justify-center items-center bg-surface flex flex-col">
+                <section className='flex flex-col justify-center align-center w-full shadow-2xl shadow-accent/30 p-12 gap-4 rounded-2xl max-w-md text-center bg-surface text-ink'>
                     <header className='mb-6 text-center'>
-                        <h1 className='text-2xl font-extrabold text-lilac'> Welcome to Core</h1>
-                        <p className='text-xs text-lilac mt-1.5'>Play . Connect . Compete</p>
+                        <h1 className='text-2xl font-extrabold text-accent'> Welcome to Core</h1>
+                        <p className='text-xs text-accent mt-1.5'>Play . Connect . Compete</p>
                     </header>
 
                     {error && (
@@ -60,8 +60,8 @@ export default function login() {
                     )}
 
                     <form onSubmit={handleLoginSubmit} className='flex flex-col gap-4' autoComplete='off'>
-                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-b border-lilac pb-4'>
-                            <label htmlFor='email' className='mb-2 block text-sm font-medium text-pale'>
+                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-b border-accent pb-4'>
+                            <label htmlFor='email' className='mb-2 block text-sm font-medium text-ink'>
                                 Email Address
                             </label>
                             <input
@@ -71,12 +71,12 @@ export default function login() {
                                 placeholder='enter your email address'
                                 required
                                 autoComplete='off'
-                                className='w-full rounded-lg border border-lilac px-4 py-3 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
+                                className='w-full rounded-lg border border-accent px-4 py-3 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent'
                             />
                         </div>
 
-                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-lilac pb-4'>
-                            <label htmlFor='password' className='mb-2 block text-sm font-medium text-pale'>
+                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-accent pb-4'>
+                            <label htmlFor='password' className='mb-2 block text-sm font-medium text-ink'>
                                 Password
                             </label>
                             <PasswordInput
@@ -84,27 +84,27 @@ export default function login() {
                                 onChange={setPassword}
                                 placeholder='enter your password'
                                 required
-                                className='w-full rounded-lg border border-lilac px-4 py-3 pr-10 outline-none transition focus:border-pale focus:ring-2 focus:ring-pale'
+                                className='w-full rounded-lg border border-accent px-4 py-3 pr-10 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent'
                             />
                         </div>
 
                         <button 
                             type='submit'
                             disabled={loading}
-                            className='btn-primary w-full rounded-lg bg-purple py-3 font-medium text-pale hover:bg-lilac hover:text-darkpurple cursor-pointer'
+                            className='btn-primary w-full rounded-lg bg-cta py-3 font-medium text-cta-ink hover:brightness-90 cursor-pointer'
                         >
                             {loading ? "Signing in..." : "Login"}
                         </button>
-                        <p className='text-pale pr-2'>
+                        <p className='text-ink pr-2'>
                             Don't have an account?  
-                            <Link href="/login/register" className='underline px-2 hover:text-lilac'>
+                            <Link href="/login/register" className='underline px-2 hover:text-accent'>
                                 Register here!
                             </Link>
                         </p>
                         <button
                             type="button"
                             onClick={() => setShowForgotPassword(true)}
-                            className="text-sm text-pale/70 hover:text-lilac underline cursor-pointer"
+                            className="text-sm text-ink/70 hover:text-accent underline cursor-pointer"
                         >
                             Forgot Password?
                         </button>
