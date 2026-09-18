@@ -1,14 +1,31 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/user/Navigation";
 import { useBooking } from "@/hooks/useBookings";
 import { formatPrice } from "@/lib/data";
+import { cancelBooking } from "@/lib/dataRoute";
 
 export default function HistoryDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id: code } = use(params);
-    const { booking, isLoading } = useBooking(code);
+    const { booking, isLoading, mutate } = useBooking(code);
+    const [canceling, setCanceling] = useState(false);
+    const [cancelError, setCancelError] = useState<string | null>(null);
+
+    const handleCancel = async () => {
+        if (!confirm("Cancel this booking? This can't be undone.")) return;
+        setCancelError(null);
+        setCanceling(true);
+        try {
+            const updated = await cancelBooking(code);
+            mutate(updated, false);
+        } catch (err) {
+            setCancelError(err instanceof Error ? err.message : "Failed to cancel booking. Please try again.");
+        } finally {
+            setCanceling(false);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -80,6 +97,17 @@ export default function HistoryDetail({ params }: { params: Promise<{ id: string
                         <span className="font-bold text-ink">Total</span>
                         <span className="font-bold text-ink">{formatPrice(Number(booking.total_price))}</span>
                     </div>
+
+                    {booking.status === "confirmed" && (
+                        <button
+                            onClick={handleCancel}
+                            disabled={canceling}
+                            className="mt-4 w-full rounded-full border border-red-500 py-3 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition cursor-pointer disabled:opacity-50"
+                        >
+                            {canceling ? "Canceling..." : "Cancel Booking"}
+                        </button>
+                    )}
+                    {cancelError && <p className="text-sm text-red-600 dark:text-red-400">{cancelError}</p>}
                 </section>
             </main>
         </>

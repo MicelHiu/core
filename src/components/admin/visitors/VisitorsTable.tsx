@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useVisitors } from "@/hooks/useVisitors";
 import VisitorRowActions from "./VisitorRowActions";
 import ActivityLogsModal from "./ActivityLogsModal";
@@ -22,7 +22,15 @@ export default function VisitorsTable() {
     const [from, setFrom] = useState(daysAgoISODate(30));
     const [to, setTo] = useState(todayISODate());
     const [statusFilter, setStatusFilter] = useState<string>("all");
-    const { visitors, isLoading, error, refetch } = useVisitors({ from, to });
+    const [searchInput, setSearchInput] = useState("");
+    const [search, setSearch] = useState("");
+    const { visitors, isLoading, error, refetch } = useVisitors({ from, to, search });
+
+    // tunggu user berhenti mengetik 300ms sebelum request ke backend
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(searchInput.trim()), 300);
+        return () => clearTimeout(timer);
+    }, [searchInput]);
 
     const [logsFor, setLogsFor] = useState<{ code: string; status: string } | null>(null);
     const [detailsFor, setDetailsFor] = useState<string | null>(null);
@@ -38,7 +46,15 @@ export default function VisitorsTable() {
 
     return (
         <div className="bg-surface border border-ink/10 shadow-sm rounded-xl p-5">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex flex-wrap items-center gap-4 mb-4">
+                <input
+                    type="search"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="Search guest, booking code, or customer..."
+                    aria-label="Search visitors"
+                    className="w-full sm:w-72 bg-bg border border-ink/15 rounded px-3 py-1.5 text-ink text-sm"
+                />
                 <label className="text-xs text-ink/70 flex items-center gap-2">
                     From
                     <input
@@ -86,7 +102,9 @@ export default function VisitorsTable() {
 
             {!isLoading && !error && (
                 filteredVisitors.length === 0 ? (
-                    <p className="text-ink/70 text-sm">No visitors in this range.</p>
+                    <p className="text-ink/70 text-sm">
+                        {search ? `No visitors match "${search}".` : "No visitors in this range."}
+                    </p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">

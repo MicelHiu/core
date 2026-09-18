@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -31,6 +32,20 @@ const navItems = [
         ),
     },
     {
+        label: "Rooms",
+        href: "/admin/rooms",
+        icon: (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3 4H21V16H14V18H17V20H7V18H10V16H3V4ZM5 6V14H19V6H5Z"
+                    fill="currentColor"
+                />
+            </svg>
+        ),
+    },
+    {
         label: "Promotion Settings",
         href: "/admin/promoSettings",
         icon: (
@@ -49,6 +64,12 @@ const navItems = [
 export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    // tutup menu mobile setiap pindah halaman
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [pathname]);
 
     async function handleLogout() {
         await fetch("/api/auth/logout", { method: "POST" });
@@ -56,12 +77,30 @@ export default function Sidebar() {
     }
 
     return (
-        <aside className="w-64 shrink-0 bg-surface border-r border-ink/10 flex flex-col">
-            <div className="px-6 py-6 border-b border-ink/10">
-                <h1 className="text-xl font-extrabold text-ink">Admin</h1>
-                <p className="text-xs text-ink/70 mt-1">Core Management</p>
+        <aside className="md:w-64 shrink-0 bg-surface border-b md:border-b-0 md:border-r border-ink/10 flex flex-col md:min-h-screen">
+            <div className="px-4 py-4 md:px-6 md:py-6 border-b border-ink/10 flex items-center justify-between">
+                <div>
+                    <h1 className="text-xl font-extrabold text-ink">Admin</h1>
+                    <p className="text-xs text-ink/70 mt-1">Core Management</p>
+                </div>
+                {/* di layar kecil menu dilipat, dibuka lewat tombol ini */}
+                <button
+                    onClick={() => setMenuOpen((open) => !open)}
+                    aria-label={menuOpen ? "Close menu" : "Open menu"}
+                    aria-expanded={menuOpen}
+                    className="md:hidden text-ink hover:text-accent cursor-pointer"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {menuOpen ? (
+                            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        ) : (
+                            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        )}
+                    </svg>
+                </button>
             </div>
 
+            <div className={`${menuOpen ? "flex" : "hidden"} md:flex flex-col flex-1`}>
             <nav className="flex flex-col gap-1 p-4">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -95,6 +134,7 @@ export default function Sidebar() {
                     </svg>
                     Logout
                 </button>
+            </div>
             </div>
         </aside>
     );

@@ -18,10 +18,10 @@ export function useBookings() {
 }
 
 export function useBooking(code: string) {
-    const { data: booking, isLoading, error } = useSWR<BookingEntry>(
+    const { data: booking, isLoading, error, mutate } = useSWR<BookingEntry>(
         code ? `/api/bookings/${code}` : null,
         fetcher
     );
 
-    return { booking, isLoading, error };
+    return { booking, isLoading, error, mutate };
 }

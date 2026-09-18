@@ -1,68 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { PasswordInput } from "./PasswordInput";
 
 interface ForgotPasswordModalProps {
     onClose: () => void;
 }
 
-type Step = "email" | "password" | "done";
-
-const inputClass =
-    "w-full rounded-lg border border-accent px-4 py-3 pr-10 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent bg-surface text-ink";
-
 export function ForgotPasswordModal({ onClose }: ForgotPasswordModalProps) {
-    const [step, setStep] = useState<Step>("email");
     const [email, setEmail] = useState("");
-    const [userId, setUserId] = useState<string | null>(null);
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleFindAccount = async (e: React.FormEvent) => {
+    const handleSendLink = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
         try {
-            const res = await fetch(`/api/auth/lookup-email?email=${encodeURIComponent(email)}`);
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error ?? "Email not found");
-            }
-            setUserId(data.id);
-            setStep("password");
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Email not found");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleResetPassword = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        if (password !== confirmPassword) {
-            setError("Passwords do not match.");
-            return;
-        }
-        if (!userId) return;
-
-        setLoading(true);
-        try {
-            const res = await fetch(`/api/users/${userId}`, {
-                method: "PATCH",
+            const res = await fetch("/api/auth/forgot-password", {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email }),
             });
             const data = await res.json();
             if (!res.ok) {
-                throw new Error(data.error ?? "Failed to reset password");
+                throw new Error(data.error ?? "Failed to send reset link");
             }
-            setStep("done");
+            setSent(true);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to reset password. Please try again.");
+            setError(err instanceof Error ? err.message : "Failed to send reset link. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -85,8 +51,8 @@ export function ForgotPasswordModal({ onClose }: ForgotPasswordModalProps) {
                     </div>
                 )}
 
-                {step === "email" && (
-                    <form onSubmit={handleFindAccount} className="flex flex-col gap-4">
+                {!sent ? (
+                    <form onSubmit={handleSendLink} className="flex flex-col gap-4">
                         <label className="flex flex-col gap-1 text-sm text-ink/70">
                             Registered email
                             <input
@@ -103,51 +69,19 @@ export function ForgotPasswordModal({ onClose }: ForgotPasswordModalProps) {
                             disabled={loading}
                             className="w-full rounded-lg bg-cta py-3 font-medium text-cta-ink hover:brightness-90 cursor-pointer disabled:opacity-50"
                         >
-                            {loading ? "Searching..." : "Find account"}
+                            {loading ? "Sending..." : "Send reset link"}
                         </button>
                     </form>
-                )}
-
-                {step === "password" && (
-                    <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
-                        <label className="flex flex-col gap-1 text-sm text-ink/70">
-                            New password
-                            <PasswordInput
-                                value={password}
-                                onChange={setPassword}
-                                placeholder="New password"
-                                required
-                                className={inputClass}
-                            />
-                        </label>
-                        <label className="flex flex-col gap-1 text-sm text-ink/70">
-                            Confirm password
-                            <PasswordInput
-                                value={confirmPassword}
-                                onChange={setConfirmPassword}
-                                placeholder="Re-enter new password"
-                                required
-                                className={inputClass}
-                            />
-                        </label>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full rounded-lg bg-cta py-3 font-medium text-cta-ink hover:brightness-90 cursor-pointer disabled:opacity-50"
-                        >
-                            {loading ? "Saving..." : "Reset Password"}
-                        </button>
-                    </form>
-                )}
-
-                {step === "done" && (
+                ) : (
                     <div className="flex flex-col items-center gap-4 text-center">
-                        <p className="text-ink text-sm">Password changed successfully. Please log in with your new password.</p>
+                        <p className="text-ink text-sm">
+                            If <span className="font-semibold">{email}</span> is registered, we&apos;ve sent a link to reset your password. The link is valid for 15 minutes.
+                        </p>
                         <button
                             onClick={onClose}
                             className="w-full rounded-lg bg-cta py-3 font-medium text-cta-ink hover:brightness-90 cursor-pointer"
                         >
-                            Log in now
+                            Back to login
                         </button>
                     </div>
                 )}

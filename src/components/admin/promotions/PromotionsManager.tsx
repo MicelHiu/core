@@ -115,7 +115,7 @@ export default function PromotionsManager() {
                             {promotions.map((promo) => {
                                 const active = isActive(promo.valid_from, promo.valid_until);
                                 return (
-                                    <li key={promo.id} className="flex items-center justify-between py-3 gap-3">
+                                    <li key={promo.id} className="flex flex-col sm:flex-row sm:items-center justify-between py-3 gap-3">
                                         <div>
                                             <p className="text-ink font-medium text-sm">{promo.name}</p>
                                             <p className="text-ink/70 text-xs mt-0.5">

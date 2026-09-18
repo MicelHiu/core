@@ -43,10 +43,11 @@ export function useVisitorStats(params: { groupBy: "day" | "month" | "year"; yea
     return { stats: stats ?? [], isLoading, error };
 }
 
-export function useVisitors(params: { from?: string; to?: string }) {
+export function useVisitors(params: { from?: string; to?: string; search?: string }) {
     const entries: [string, string][] = [];
     if (params.from) entries.push(["from", params.from]);
     if (params.to) entries.push(["to", params.to]);
+    if (params.search) entries.push(["search", params.search]);
     const query = new URLSearchParams(entries).toString();
 
     const { data: visitors, isLoading, error, mutate } = useSWR<VisitorEntry[]>(

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useSWR, { mutate } from "swr";
-import { AuthUser } from "@/lib/auth";
+import type { AuthUser } from "@/lib/auth";
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useCarts } from "@/hooks/useCarts";
@@ -17,6 +17,7 @@ const fetcher = (url: string) =>
 export function Navigation() {
     const router = useRouter();
     const [error, setError] = useState<string | null> (null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const { data: user } = useSWR<AuthUser>("/api/auth/me", fetcher, {
         shouldRetryOnError: false,
@@ -37,10 +38,30 @@ export function Navigation() {
     }
 
     return (
-        <header className="bg-surface relative flex flex-row items-center justify-between w-full border-b border-accent px-8 py-4">
-            <h1 className="font-bold text-ink text-2xl">CORE</h1>
+        <header className="bg-surface relative flex flex-row items-center justify-between w-full border-b border-accent px-4 md:px-8 py-4">
+            <div className="flex items-center gap-3">
+                {/* hamburger: hanya tampil di layar kecil */}
+                <button
+                    onClick={() => setMenuOpen((open) => !open)}
+                    aria-label={menuOpen ? "Close menu" : "Open menu"}
+                    aria-expanded={menuOpen}
+                    className="md:hidden text-ink hover:text-accent cursor-pointer"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {menuOpen ? (
+                            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        ) : (
+                            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        )}
+                    </svg>
+                </button>
+                <h1 className="font-bold text-ink text-2xl">CORE</h1>
+            </div>
 
-            <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 text-ink">
+            <nav
+                className={`${menuOpen ? "flex" : "hidden"} md:flex absolute top-full left-0 right-0 z-40 flex-col items-start gap-4 bg-surface border-b border-accent px-4 py-4 text-ink
+                    md:top-auto md:right-auto md:left-1/2 md:-translate-x-1/2 md:flex-row md:items-center md:gap-8 md:bg-transparent md:border-0 md:p-0`}
+            >
                 <Link 
                     href="/dashboard"
                     className="text-sm font-medium text-ink hover:text-accent cursor-pointer"
@@ -64,7 +85,7 @@ export function Navigation() {
             </nav>
 
             { isLoggedIn ? (
-                <div className="flex flex-row gap-8">
+                <div className="flex flex-row items-center gap-4 md:gap-8">
                     <Link 
                         href="/cart"
                         className="relative text-sm font-medium text-ink hover:text-accent cursor-pointer"

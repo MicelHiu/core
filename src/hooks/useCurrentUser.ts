@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { AuthUser } from "@/lib/auth";
+import type { AuthUser } from "@/lib/auth";
 import { backendFetch } from "@/lib/backend";
 
 const fetcher = (url: string) => 

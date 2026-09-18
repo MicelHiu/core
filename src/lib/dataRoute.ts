@@ -75,6 +75,63 @@ export interface Profile {
     password: string;
 }
 
+//rooms (admin) — bentuk mentah dari backend, beda dengan Room di lib/data.ts
+export type RoomType = "PC" | "PS";
+
+export interface AdminRoom {
+    id: string;
+    name: string;
+    description: string;
+    price: string | number;
+    image: string;
+    type: RoomType;
+    stock: number;
+    stock_today?: number;
+}
+
+export type RoomPayload = Omit<AdminRoom, "stock_today" | "price"> & { price: number };
+
+function errorMessage(data: { message?: string | string[]; error?: string } | null, fallback: string) {
+    const message = Array.isArray(data?.message) ? data.message.join(", ") : data?.message;
+    return message ?? data?.error ?? fallback;
+}
+
+export async function getAdminRooms(): Promise<AdminRoom[]> {
+    const res = await fetch("/api/rooms");
+    if (!res.ok) throw new Error("Failed to fetch rooms");
+    return res.json();
+}
+
+export async function createRoom(payload: RoomPayload): Promise<AdminRoom> {
+    const res = await fetch("/api/rooms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(errorMessage(data, "Failed to create room"));
+    return data;
+}
+
+export async function updateRoom(id: string, payload: Partial<Omit<RoomPayload, "id">>): Promise<AdminRoom> {
+    const res = await fetch(`/api/rooms/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(errorMessage(data, "Failed to update room"));
+    return data;
+}
+
+export async function deleteRoom(id: string): Promise<void> {
+    const res = await fetch(`/api/rooms/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(errorMessage(data, "Failed to delete room"));
+    }
+}
+
 export async function getProfile(): Promise<Profile[]> {
     const res = await fetch("/api/auth/me");
     if (!res.ok) throw new Error("Failed to fetch profile. Please log in again");
@@ -125,7 +182,7 @@ export interface CreateCartPayload {
     discount_id?: string;
 }
 
-export type UpdateCartPayload = Partial<CreateCartPayload> & { discount_id?: string | null };
+export type UpdateCartPayload = Partial<Omit<CreateCartPayload, "discount_id">> & { discount_id?: string | null };
 
 export async function fetchCarts(): Promise<CartEntry[]> {
     const res = await fetch("/api/carts");
@@ -207,6 +264,13 @@ export async function createBooking(payload: CreateBookingPayload): Promise<Book
         console.error("createBooking failed", res.status, data);
         throw new Error(data?.message ?? "Failed to confirm booking");
     }
+    return data;
+}
+
+export async function cancelBooking(code: string): Promise<BookingEntry> {
+    const res = await fetch(`/api/bookings/${code}/cancel`, { method: "PATCH" });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.message ?? data?.error ?? "Failed to cancel booking");
     return data;
 }
 

@@ -1,4 +1,3 @@
-import { backendFetch } from "./backend";
 import { cookies } from "next/headers";
 
 export interface AuthUser {
@@ -49,23 +48,5 @@ export async function getAdminUser(): Promise<AuthUser | null> {
     } catch {
         return null;
     }
-}
-
-//api helper
-//register
-export async function registerUser(user: RegisterForm) {
-    const payload = {
-        ...user,
-    }
-
-    const res = await backendFetch('/auth/register', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(user),
-    });
-    const result = await res.json();
-    return {
-        ...result,
-    };
 }
 

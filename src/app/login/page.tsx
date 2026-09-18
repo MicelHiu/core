@@ -46,8 +46,8 @@ export default function login() {
 
     return (
         <>
-            <main className="min-h-screen justify-center items-center bg-surface flex flex-col">
-                <section className='flex flex-col justify-center align-center w-full shadow-2xl shadow-accent/30 p-12 gap-4 rounded-2xl max-w-md text-center bg-surface text-ink'>
+            <main className="min-h-screen justify-center items-center bg-surface flex flex-col px-4">
+                <section className='flex flex-col justify-center align-center w-full shadow-2xl shadow-accent/30 p-6 sm:p-12 gap-4 rounded-2xl max-w-md text-center bg-surface text-ink'>
                     <header className='mb-6 text-center'>
                         <h1 className='text-2xl font-extrabold text-accent'> Welcome to Core</h1>
                         <p className='text-xs text-accent mt-1.5'>Play . Connect . Compete</p>
@@ -60,7 +60,7 @@ export default function login() {
                     )}
 
                     <form onSubmit={handleLoginSubmit} className='flex flex-col gap-4' autoComplete='off'>
-                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-b border-accent pb-4'>
+                        <div className='flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-2 mb-4 border-b border-accent pb-4'>
                             <label htmlFor='email' className='mb-2 block text-sm font-medium text-ink'>
                                 Email Address
                             </label>
@@ -75,7 +75,7 @@ export default function login() {
                             />
                         </div>
 
-                        <div className='flex flex-row justify-center items-center gap-2 mb-4 border-accent pb-4'>
+                        <div className='flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-2 mb-4 border-accent pb-4'>
                             <label htmlFor='password' className='mb-2 block text-sm font-medium text-ink'>
                                 Password
                             </label>
