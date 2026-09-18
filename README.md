@@ -31,7 +31,7 @@ There are 3 roles you can use to simulate this app:
 1. Guest = no login needed.
    notes: Can browse the Dashboard and Room Detail pages, but must log in to book a room.
 
-2. Admin = `micelasatu@gmail.com` (email) / `micel123` (password)
+2. Admin = `micelasatu@gmail.com` (email) / `micel1234` (password)
    notes: Full access, including the admin dashboard, rooms, promotions, and visitors management.
 
 3. Customer = `mikhael@gmail.com` (email) / `mikel123` (password) 
