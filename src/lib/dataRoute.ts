@@ -11,6 +11,17 @@ export interface DiscountFromApi {
     valid_from: string;
 }
 
+export interface CreatePromotionPayload {
+    name: string;
+    value: string;
+    valid_from: string;
+    valid_until: string;
+}
+
+export type UpdatePromotionPayload = Partial<CreatePromotionPayload> & {
+    is_active?: boolean;
+};
+
 export async function getPromotions(): Promise<DiscountFromApi[]> {
     const res = await fetch("/api/promotions");
     if (!res.ok) throw new Error("Failed to fetch discounts");
@@ -24,6 +35,33 @@ export async function getPromotions(): Promise<DiscountFromApi[]> {
         valid_until: d.valid_until,
         valid_from: d.valid_from
     }));
+}
+
+export async function createPromotion(payload: CreatePromotionPayload): Promise<DiscountFromApi> {
+    const res = await fetch("/api/promotions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.message ?? "Failed to create promotion");
+    return data;
+}
+
+export async function updatePromotion(id: string, payload: UpdatePromotionPayload): Promise<DiscountFromApi> {
+    const res = await fetch(`/api/promotions/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.message ?? "Failed to update promotion");
+    return data;
+}
+
+export async function deletePromotion(id: string): Promise<void> {
+    const res = await fetch(`/api/promotions/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Failed to delete promotion");
 }
 
 //profile

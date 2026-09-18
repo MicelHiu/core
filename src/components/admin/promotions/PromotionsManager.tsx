@@ -1,0 +1,154 @@
+"use client";
+
+import { useState } from "react";
+import { usePromotions } from "@/hooks/usePromotions";
+import { createPromotion, deletePromotion, updatePromotion } from "@/lib/dataRoute";
+import { formatPrice } from "@/lib/data";
+
+function isActive(validFrom: string, validUntil: string) {
+    const now = Date.now();
+    return new Date(validFrom).getTime() <= now && now <= new Date(validUntil).getTime();
+}
+
+export default function PromotionsManager() {
+    const { promotions, isLoading, error, refetch } = usePromotions();
+    const [name, setName] = useState("");
+    const [value, setValue] = useState("");
+    const [validFrom, setValidFrom] = useState("");
+    const [validUntil, setValidUntil] = useState("");
+    const [formError, setFormError] = useState<string | null>(null);
+    const [submitting, setSubmitting] = useState(false);
+
+    async function handleCreate(e: React.FormEvent) {
+        e.preventDefault();
+        setFormError(null);
+        setSubmitting(true);
+        try {
+            await createPromotion({ name, value, valid_from: validFrom, valid_until: validUntil });
+            setName("");
+            setValue("");
+            setValidFrom("");
+            setValidUntil("");
+            refetch();
+        } catch (err) {
+            setFormError(err instanceof Error ? err.message : "Failed to create promotion");
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+    async function handleToggleActive(id: string, currentlyActive: boolean) {
+        await updatePromotion(id, { is_active: !currentlyActive });
+        refetch();
+    }
+
+    async function handleDelete(id: string) {
+        if (!confirm("Delete this promotion?")) return;
+        await deletePromotion(id);
+        refetch();
+    }
+
+    return (
+        <div className="flex flex-col gap-6">
+            <form
+                onSubmit={handleCreate}
+                className="bg-purple-light/10 border border-lilac/20 rounded-xl p-5 grid grid-cols-1 md:grid-cols-4 gap-3 items-end"
+            >
+                <label className="text-xs text-pale/60 flex flex-col gap-1">
+                    Name
+                    <input
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-sm"
+                    />
+                </label>
+                <label className="text-xs text-pale/60 flex flex-col gap-1">
+                    Value
+                    <input
+                        required
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        placeholder="e.g. 10"
+                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-sm"
+                    />
+                </label>
+                <label className="text-xs text-pale/60 flex flex-col gap-1">
+                    Valid From
+                    <input
+                        required
+                        type="date"
+                        value={validFrom}
+                        onChange={(e) => setValidFrom(e.target.value)}
+                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-sm"
+                    />
+                </label>
+                <label className="text-xs text-pale/60 flex flex-col gap-1">
+                    Valid Until
+                    <input
+                        required
+                        type="date"
+                        value={validUntil}
+                        onChange={(e) => setValidUntil(e.target.value)}
+                        className="bg-purple-light/20 border border-lilac/20 rounded px-2 py-1 text-pale text-sm"
+                    />
+                </label>
+                <button
+                    type="submit"
+                    disabled={submitting}
+                    className="md:col-span-4 bg-lilac/20 text-lilac font-medium text-sm py-2 rounded-lg hover:bg-lilac/30 transition-colors disabled:opacity-50"
+                >
+                    {submitting ? "Adding..." : "Add Promotion"}
+                </button>
+                {formError && <p className="md:col-span-4 text-red-400 text-sm">{formError}</p>}
+            </form>
+
+            <div className="bg-purple-light/10 border border-lilac/20 rounded-xl p-5">
+                {isLoading && <p className="text-pale/60 text-sm">Loading...</p>}
+                {error && <p className="text-red-400 text-sm">Failed to load promotions.</p>}
+
+                {!isLoading && !error && (
+                    promotions.length === 0 ? (
+                        <p className="text-pale/60 text-sm">No promotions available.</p>
+                    ) : (
+                        <ul className="flex flex-col divide-y divide-lilac/10">
+                            {promotions.map((promo) => {
+                                const active = isActive(promo.valid_from, promo.valid_until);
+                                return (
+                                    <li key={promo.id} className="flex items-center justify-between py-3 gap-3">
+                                        <div>
+                                            <p className="text-pale font-medium text-sm">{promo.name}</p>
+                                            <p className="text-pale/60 text-xs mt-0.5">
+                                                {new Date(promo.valid_from).toLocaleDateString("id-ID")} –{" "}
+                                                {new Date(promo.valid_until).toLocaleDateString("id-ID")}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-lilac text-sm font-semibold">{formatPrice(promo.value)}</span>
+                                            <button
+                                                onClick={() => handleToggleActive(promo.id, active)}
+                                                className={`text-[10px] font-medium px-2 py-1 rounded-full transition-colors ${
+                                                    active
+                                                        ? "bg-lilac/20 text-lilac"
+                                                        : "bg-pale/10 text-pale/50"
+                                                }`}
+                                            >
+                                                {active ? "Active" : "Inactive"}
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(promo.id)}
+                                                className="text-[10px] font-medium px-2 py-1 rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )
+                )}
+            </div>
+        </div>
+    );
+}

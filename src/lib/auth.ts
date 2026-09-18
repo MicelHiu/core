@@ -38,6 +38,19 @@ export async function getSessionToken(): Promise<string | null> {
     }
 }
 
+export async function getAdminUser(): Promise<AuthUser | null> {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("session");
+    if (!session) return null;
+
+    try {
+        const { user }: SessionData = JSON.parse(session.value);
+        return user?.role === "admin" ? user : null;
+    } catch {
+        return null;
+    }
+}
+
 //api helper
 //register
 export async function registerUser(user: RegisterForm) {

@@ -33,7 +33,7 @@ export default function login() {
 
             //mutate the global SWR cache key to fetch fresh session details immedietly
             await mutate('/api/auth/me', data, true);
-            router.push(data.role === 'admin' ? '/dashboard/admin' : '/dashboard');
+            router.push(data.role === 'admin' ? '/admin/dashboard' : '/dashboard');
         } catch (err: any) {
             setError(err.message || 'Authentication failed. Please register if you are new');
         } finally {
