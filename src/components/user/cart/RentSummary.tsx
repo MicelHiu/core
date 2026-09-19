@@ -8,9 +8,10 @@ type RentSummaryProps = {
     total: number;
     discountName?: string;
     discountValue?: number;
+    pointsEarned: number;
 }
 
-export function RentSummary({roomName, price, seats, duration, total, discountName, discountValue}: RentSummaryProps) {
+export function RentSummary({roomName, price, seats, duration, total, discountName, discountValue, pointsEarned}: RentSummaryProps) {
     return (
         <section className="max-w-md bg-surface/60 border border-accent/40 rounded-2xl p-8 shadow-xl">
             <h2 className="text-2xl font-bold text-ink mb-6 text-center">Order Summary</h2>
@@ -41,6 +42,11 @@ export function RentSummary({roomName, price, seats, duration, total, discountNa
                         <span className="font-semibold text-accent">-{formatPrice(discountValue)}</span>
                     </div>
                 )}
+                <div className="flex justify-between text-sm">
+                    <span className="text-ink/70">Points Earned</span>
+                    <span className="font-semibold text-accent">+{pointsEarned}</span>
+                </div>
+
                 <hr className="border-accent/30 my-2" />
 
                 <div className="flex justify-between">

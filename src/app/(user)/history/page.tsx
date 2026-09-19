@@ -39,6 +39,9 @@ export default function History() {
                                 <p className="text-sm text-ink/70">
                                     {new Date(b.date_play).toLocaleDateString("id-ID")} · {b.time_start.slice(0, 5)}–{b.time_end.slice(0, 5)} · {b.quantity} seat(s)
                                 </p>
+                                <p className="text-sm text-accent font-semibold mt-1">
+                                    +{b.points_earned} points
+                                </p>
                                 <p className="text-right font-bold text-ink mt-2">
                                     {formatPrice(Number(b.total_price))}
                                 </p>

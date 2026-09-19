@@ -6,15 +6,16 @@ import { Navigation } from "@/components/user/Navigation";
 import { useBooking } from "@/hooks/useBookings";
 import { formatPrice } from "@/lib/data";
 import { cancelBooking } from "@/lib/dataRoute";
+import { CancelConfirmPopup } from "@/components/user/history/CancelConfirmPopup";
 
 export default function HistoryDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id: code } = use(params);
     const { booking, isLoading, mutate } = useBooking(code);
     const [canceling, setCanceling] = useState(false);
     const [cancelError, setCancelError] = useState<string | null>(null);
+    const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
     const handleCancel = async () => {
-        if (!confirm("Cancel this booking? This can't be undone.")) return;
         setCancelError(null);
         setCanceling(true);
         try {
@@ -90,6 +91,10 @@ export default function HistoryDetail({ params }: { params: Promise<{ id: string
                         <span className="text-ink/70">Seats</span>
                         <span className="font-semibold text-ink">{booking.quantity}</span>
                     </div>
+                    <div className="flex justify-between text-sm">
+                        <span className="text-ink/70">Points Earned</span>
+                        <span className="font-semibold text-accent">+{booking.points_earned}</span>
+                    </div>
 
                     <hr className="border-accent/30 my-2" />
 
@@ -100,7 +105,7 @@ export default function HistoryDetail({ params }: { params: Promise<{ id: string
 
                     {booking.status === "confirmed" && (
                         <button
-                            onClick={handleCancel}
+                            onClick={() => setShowCancelConfirm(true)}
                             disabled={canceling}
                             className="mt-4 w-full rounded-full border border-red-500 py-3 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition cursor-pointer disabled:opacity-50"
                         >
@@ -110,6 +115,17 @@ export default function HistoryDetail({ params }: { params: Promise<{ id: string
                     {cancelError && <p className="text-sm text-red-600 dark:text-red-400">{cancelError}</p>}
                 </section>
             </main>
+
+            {showCancelConfirm && (
+                <CancelConfirmPopup
+                    points={booking.points_earned}
+                    onClose={() => setShowCancelConfirm(false)}
+                    onConfirm={async () => {
+                        setShowCancelConfirm(false);
+                        await handleCancel();
+                    }}
+                />
+            )}
         </>
     );
 }

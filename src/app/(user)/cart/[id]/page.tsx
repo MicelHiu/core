@@ -16,6 +16,7 @@ import { usePromotions } from "@/hooks/usePromotions";
 import { PromoUsedCard } from "@/components/user/cart/PromoUsedCard";
 import { PromoPickerPopup } from "@/components/user/cart/PromoPicker";
 import { useBookingForm } from "@/hooks/useBookingForm";
+import { calculatePointsPreview } from "@/lib/points";
 import { useEffect } from "react";
 
 const HOUR_OPTIONS = Array.from({ length: 16 }, (_, i) => {
@@ -72,6 +73,7 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
     const total = price * seats * duration;
     const discountValue = selectedPromo ? Number(selectedPromo.value) : 0;
     const finalTotal = Math.max(0, total - discountValue);
+    const pointsPreview = calculatePointsPreview(seats, duration);
     const isFormValid = form.name.trim() && form.contact.trim() && form.date && duration > 0;
 
     const handleBooked = async () => {
@@ -215,6 +217,7 @@ export default function CartDetail({ params }: { params: Promise<{ id: string }>
                             total={finalTotal}
                             discountName={selectedPromo?.name}
                             discountValue={discountValue}
+                            pointsEarned={pointsPreview}
                         />
 
                         <PromoUsedCard

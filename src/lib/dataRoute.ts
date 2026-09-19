@@ -244,6 +244,7 @@ export interface BookingEntry {
     total_price: string;
     status: BookingStatus;
     created_at: string;
+    points_earned: number;
     rooms?: CartRoom;
 }
 
