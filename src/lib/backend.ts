@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.BACKEND_API_URL ?? "https://core-backend-production-d8cd.up.railway.app";
+const BACKEND_URL = process.env.BACKEND_API_URL ?? "https://core-backend-production-c7f4814e.up.railway.app";
 
 export async function backendFetch(path: string, options: RequestInit = {}) {
     const res = await fetch(`${BACKEND_URL}${path}`, {
