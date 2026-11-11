@@ -66,7 +66,7 @@ Authentication (`/login`, `/login/register`) = Sign up and sign in, with a forgo
 - Frontend    : Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, SWR, Recharts
 - Backend     : NestJS 11, Prisma 7, PostgreSQL
 - Deploy      : Frontend on Vercel, Backend on Railway
-- URL         : https://core-six-gold.vercel.app
+- URL         : https://core-backup.vercel.app/
 
 
 # Getting Started (DEV)
