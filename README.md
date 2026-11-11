@@ -14,7 +14,7 @@ There are 3 roles you can use to simulate this app:
    notes: Can access booking, cart, history, promotions, and profile — no access to `/admin/*`.
 
 # Features Implemented
-## THEME - following your windoows settings
+## THEME - following your windows settings
 1. Light
    ![light](public/images/guest-dashboard.png)
 2. Dark
